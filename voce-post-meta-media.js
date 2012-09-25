@@ -21,7 +21,7 @@ window.VocePostMetaMedia = {
     * @param integer id
     */
 	setThumbnailID: function(thumb_id, id){
-		var field = jQuery('input#asset_link.hidden');
+		var field = jQuery('input#'+id+'.hidden');
 		if ( field.size() > 0 ) {
 			jQuery(field).val(thumb_id);
 		}

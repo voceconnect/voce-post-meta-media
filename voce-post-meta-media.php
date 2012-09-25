@@ -9,7 +9,6 @@
   License: A "Slug" license name e.g. GPL2
  */
 
-//@TODO get the instance variables set by the parent Voce Post Meta Plugin
 class Voce_Post_Meta_Media {
 
 	public static function initialize() {
@@ -72,25 +71,24 @@ class Voce_Post_Meta_Media {
 			$calling_post_id = absint( $_GET['post_id'] );
 		elseif ( isset( $_POST ) && count( $_POST ) ) // Like for async-upload where $_GET['post_id'] isn't set
 			$calling_post_id = $post->post_parent;
-
 		if ( !$calling_post_id ) {
 			return $form_fields;
 		}
 
 		$referer = wp_get_referer();
 		$query_vars = wp_parse_args( parse_url( $referer, PHP_URL_QUERY ) );
-
-		if ( isset( $_REQUEST['context'] ) || isset( $query_vars['context'] ) ) {
+		$meta_id = $_REQUEST['meta_id'];		
+		if ( (isset( $_REQUEST['context'] ) && $_REQUEST['context'] != $meta_id) || (isset( $query_vars['context'] ) && $query_vars['context'] != $meta_id) ) {
 			return $form_fields;
 		}
-
 		$post_type = get_post_type( $calling_post_id );
 		$mime_type = $post->post_mime_type;
 		$icon = (strpos( $mime_type, 'image' )) ? false : true;
+		$label = $_REQUEST['meta_label'];
 		$img_html = esc_attr( wp_get_attachment_image( $post->ID, 'medium', $icon ) );
-		$link = sprintf( '<a id="%4$s-%1$s-thumbnail-%2$s" class="%1$s-thumbnail" href="#" onclick="VocePostMetaMedia.setAsThumbnail(\'%2$s\', \'%1$s\', \'%4$s\', \'%5$s\');return false;">Set as %3$s</a>', $this->id, $post->ID, $this->label, $post_type, $img_html );
-		$form_fields["{$this->post_type}-{$this->id}-thumbnail"] = array(
-			'label' => $this->label,
+		$link = sprintf( '<a id="%4$s-%1$s-thumbnail-%2$s" class="%1$s-thumbnail" href="#" onclick="VocePostMetaMedia.setAsThumbnail(\'%2$s\', \'%1$s\', \'%4$s\', \'%5$s\');return false;">Set as %3$s</a>', $meta_id, $post->ID, $label, $post_type, $img_html );
+		$form_fields["{$post_type}-{$meta_id}-thumbnail"] = array(
+			'label' => $label,
 			'input' => 'html',
 			'html' => $link );
 		return $form_fields;
@@ -121,7 +119,7 @@ if ( class_exists( 'Voce_Meta_API' ) ) {
 		$post_type = get_post_type( $post_id );
 		$image_library_url = get_upload_iframe_src( 'image' );
 		// if TB_iframe is not moved to end of query string, thickbox will remove all query args after it.
-		$image_library_url = add_query_arg( array( 'context' => $field->id, 'TB_iframe' => 1 ), remove_query_arg( 'TB_iframe', $image_library_url ) );
+		$image_library_url = add_query_arg( array( 'context' => $field->id, 'meta_id'=>$field->id, 'meta_label'=>$field->label, 'TB_iframe' => 1 ), remove_query_arg( 'TB_iframe', $image_library_url ) );
 		$value_post = get_post( $value );
 		$mime_type = $value_post->post_mime_type;
 		$icon = (strpos( $mime_type, 'image' )) ? false : true;
