@@ -115,7 +115,8 @@ if ( class_exists( 'Voce_Meta_API' ) ) {
 	Voce_Post_Meta_Media::initialize();
 
 	function voce_media_field_display( $field, $value, $post_id ) {
-		global $content_width, $_wp_additional_image_sizes;
+		global $content_width, $_wp_additional_image_sizes, $post;
+		$post_id = (!empty($post_id)) ? $post_id : $post->ID;
 		$post_type = get_post_type( $post_id );
 		$image_library_url = get_upload_iframe_src( 'image' );
 		// if TB_iframe is not moved to end of query string, thickbox will remove all query args after it.
