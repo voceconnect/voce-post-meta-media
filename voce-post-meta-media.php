@@ -77,7 +77,7 @@ class Voce_Post_Meta_Media {
 
 		$referer = wp_get_referer();
 		$query_vars = wp_parse_args( parse_url( $referer, PHP_URL_QUERY ) );
-		$meta_id = $_REQUEST['meta_id'];		
+		$meta_id = (isset($_REQUEST['meta_id']) ? $_REQUEST['meta_id'] : null);
 		if ( (isset( $_REQUEST['context'] ) && $_REQUEST['context'] != $meta_id) || (isset( $query_vars['context'] ) && $query_vars['context'] != $meta_id) ) {
 			return $form_fields;
 		}
@@ -123,7 +123,7 @@ if ( class_exists( 'Voce_Meta_API' ) ) {
 		$value_post = get_post( $value );
 		$mime_type = $value_post->post_mime_type;
 		$icon = (strpos( $mime_type, 'image' )) ? false : true;
-		if ( !isset( $_wp_additional_image_sizes["{$field->post_type}-{$field->id}-thumbnail"] ) ) {
+		if ( !isset($field->post_type) || !isset( $_wp_additional_image_sizes["{$field->post_type}-{$field->id}-thumbnail"] ) ) {
 			$thumbnail_html = wp_get_attachment_image( $value, array( $content_width, $content_width ), $icon );
 		} else {
 			$thumbnail_html = wp_get_attachment_image( $value, "{$this->post_type}-{$this->id}-thumbnail", $icon );
