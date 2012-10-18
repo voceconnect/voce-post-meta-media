@@ -4,9 +4,9 @@
   Plugin URI: http://vocecommunications.com
   Description: Extends Voce Post Meta with a media picker field
   Version: 0.1
-  Author: Mark Parolisi
+  Author: markparolisi, voceplatforms
   Author URI: http://vocecommunications.com
-  License: A "Slug" license name e.g. GPL2
+  License: GPL2
  */
 
 class Voce_Post_Meta_Media {
