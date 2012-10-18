@@ -77,15 +77,15 @@ class Voce_Post_Meta_Media {
 
 		$referer = wp_get_referer();
 		$query_vars = wp_parse_args( parse_url( $referer, PHP_URL_QUERY ) );
-		$meta_id = $_REQUEST['meta_id'];		
+		$meta_id = (isset($_REQUEST['meta_id']) ? $_REQUEST['meta_id'] : null);
 		if ( (isset( $_REQUEST['context'] ) && $_REQUEST['context'] != $meta_id) || (isset( $query_vars['context'] ) && $query_vars['context'] != $meta_id) ) {
 			return $form_fields;
 		}
 		$post_type = get_post_type( $calling_post_id );
 		$mime_type = $post->post_mime_type;
 		$icon = (strpos( $mime_type, 'image' )) ? false : true;
-		$label = $_REQUEST['meta_label'];
-		$img_html = esc_attr( wp_get_attachment_image( $post->ID, 'medium', $icon ) );
+		$label = (isset($_REQUEST['meta_label']) ? $_REQUEST['meta_label'] : null);
+        $img_html = esc_attr( wp_get_attachment_image( $post->ID, 'medium', $icon ) );
 		$link = sprintf( '<a id="%4$s-%1$s-thumbnail-%2$s" class="%1$s-thumbnail" href="#" onclick="VocePostMetaMedia.setAsThumbnail(\'%2$s\', \'%1$s\', \'%4$s\', \'%5$s\');return false;">Set as %3$s</a>', $meta_id, $post->ID, $label, $post_type, $img_html );
 		$form_fields["{$post_type}-{$meta_id}-thumbnail"] = array(
 			'label' => $label,
@@ -115,8 +115,7 @@ if ( class_exists( 'Voce_Meta_API' ) ) {
 	Voce_Post_Meta_Media::initialize();
 
 	function voce_media_field_display( $field, $value, $post_id ) {
-		global $content_width, $_wp_additional_image_sizes, $post;
-		$post_id = (!empty($post_id)) ? $post_id : $post->ID;
+		global $content_width, $_wp_additional_image_sizes;
 		$post_type = get_post_type( $post_id );
 		$image_library_url = get_upload_iframe_src( 'image' );
 		// if TB_iframe is not moved to end of query string, thickbox will remove all query args after it.
@@ -124,7 +123,7 @@ if ( class_exists( 'Voce_Meta_API' ) ) {
 		$value_post = get_post( $value );
 		$mime_type = $value_post->post_mime_type;
 		$icon = (strpos( $mime_type, 'image' )) ? false : true;
-		if ( !isset( $_wp_additional_image_sizes["{$field->post_type}-{$field->id}-thumbnail"] ) ) {
+		if ( !isset($field->post_type) || !isset( $_wp_additional_image_sizes["{$field->post_type}-{$field->id}-thumbnail"] ) ) {
 			$thumbnail_html = wp_get_attachment_image( $value, array( $content_width, $content_width ), $icon );
 		} else {
 			$thumbnail_html = wp_get_attachment_image( $value, "{$this->post_type}-{$this->id}-thumbnail", $icon );
