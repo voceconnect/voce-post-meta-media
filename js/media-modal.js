@@ -24,7 +24,7 @@ var MediaModal = function (options) {
       library : {
         type : 'image'
       },
-	  multiple: false
+      multiple: false
     });
 		
     // Set filterable state to uploaded to get select to show (setting this

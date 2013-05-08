@@ -8,8 +8,8 @@ window.VocePostMetaMedia = {
     * @param integer id
     * @param string post_type
     */
-	setThumbnailHTML: function(html, id, post_type){
-		jQuery('#set-'+ post_type +'-'+ id +'-thumbnail').html('<img src="'+unescape(html)+'" />');
+	setThumbnailHTML: function(thumb_url, id, post_type){
+		jQuery('#set-'+ post_type +'-'+ id +'-thumbnail').html('<img src="'+unescape(thumb_url)+'" />');
 		jQuery('#remove-'+ post_type +'-'+ id +'-thumbnail').show();
 	},
         
