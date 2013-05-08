@@ -9,7 +9,7 @@ window.VocePostMetaMedia = {
     * @param string post_type
     */
 	setThumbnailHTML: function(html, id, post_type){
-		jQuery('#set-'+ post_type +'-'+ id +'-thumbnail').html('<img width="266px" src="'+unescape(html)+'" />');
+		jQuery('#set-'+ post_type +'-'+ id +'-thumbnail').html('<img src="'+unescape(html)+'" />');
 		jQuery('#remove-'+ post_type +'-'+ id +'-thumbnail').show();
 	},
         
@@ -40,7 +40,7 @@ window.VocePostMetaMedia = {
 		if ( field.size() > 0 ) {
 			jQuery(field).val('');
 		}
-		jQuery("#set-" + post_type + "-" + id + "-thumbnail").html('Add ' + label).data('thumbnail_id', '');
+		jQuery("#set-" + post_type + "-" + id + "-thumbnail").html('Set ' + label).data('thumbnail_id', '');
 		jQuery("#remove-" + post_type + "-" + id + "-thumbnail").hide();
 	},
 
