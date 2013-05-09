@@ -8,8 +8,8 @@ window.VocePostMetaMedia = {
     * @param integer id
     * @param string post_type
     */
-	setThumbnailHTML: function(html, id, post_type){
-		jQuery('#set-'+ post_type +'-'+ id +'-thumbnail').html(unescape(html));
+	setThumbnailHTML: function(thumb_url, id, post_type){
+		jQuery('#set-'+ post_type +'-'+ id +'-thumbnail').html('<img src="'+unescape(thumb_url)+'" />');
 		jQuery('#remove-'+ post_type +'-'+ id +'-thumbnail').show();
 	},
         
@@ -20,13 +20,14 @@ window.VocePostMetaMedia = {
     * @param integer thumb_id
     * @param integer id
     */
-	setThumbnailID: function(thumb_id, id){
+	setThumbnailID: function(thumb_id, id, post_type){
+		jQuery('#set-'+ post_type +'-'+ id +'-thumbnail').data('thumbnail_id', thumb_id);
 		var field = jQuery('input#'+id+'.hidden');
 		if ( field.size() > 0 ) {
 			jQuery(field).val(thumb_id);
 		}
 	},
-        
+
 	/**
          * Unset the value in the hidden field
          * Remove the displayed image in the post meta box
@@ -35,15 +36,15 @@ window.VocePostMetaMedia = {
          * @param integer id
          * @param post_type
          */
-	remove: function(id, post_type){
+	remove: function(id, post_type, label){
 		var field = jQuery('input#' + id + '.hidden');
 		if ( field.size() > 0 ) {
 			jQuery(field).val('');
 		}
-		jQuery("#set-" + post_type + "-" + id + "-thumbnail").html("Add media");
+		jQuery("#set-" + post_type + "-" + id + "-thumbnail").html('Set ' + label).data('thumbnail_id', '');
 		jQuery("#remove-" + post_type + "-" + id + "-thumbnail").hide();
 	},
-        
+
 	/**
          * Signal the selected media contents to the parent window (from TB)
          *
@@ -53,11 +54,11 @@ window.VocePostMetaMedia = {
          * @param string post_type
          * @param string img_html
          */
-	setAsThumbnail: function(thumb_id, id, post_type, img_html){
+	setAsThumbnail: function(thumb_id, thumb_url, id, post_type){
 		var win = window.dialogArguments || opener || parent || top;
 		win.tb_remove();
-		win.VocePostMetaMedia.setThumbnailID(thumb_id, id);
-		win.VocePostMetaMedia.setThumbnailHTML(escape(img_html), id, post_type);
+		win.VocePostMetaMedia.setThumbnailID(thumb_id, id, post_type);
+		win.VocePostMetaMedia.setThumbnailHTML(escape(thumb_url), id, post_type);
 	}
         
 }
