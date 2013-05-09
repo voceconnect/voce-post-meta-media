@@ -157,7 +157,8 @@ function voce_media_field_display( $field, $value, $post_id ) {
 			'var mm_%3$s = new MediaModal({
 				calling_selector : "#set-%1$s-%2$s-thumbnail",
 				cb : function(attachment){
-					VocePostMetaMedia.setAsThumbnail(attachment.id, attachment.sizes.medium.url, "%2$s", "%1$s");
+					var img_url = typeof attachment.sizes == "object" ? attachment.sizes.medium.url : attachment.icon;
+					VocePostMetaMedia.setAsThumbnail(attachment.id, img_url, "%2$s", "%1$s");
 				}
 			});',
 			$post_type, $field->id, md5( $field->id )

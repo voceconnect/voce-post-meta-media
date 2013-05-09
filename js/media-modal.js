@@ -21,9 +21,6 @@ var MediaModal = function (options) {
       button: {
         text: jQuery(this).data('uploader_button_text')
       },
-      library : {
-        type : 'image'
-      },
       multiple: false
     });
 		
