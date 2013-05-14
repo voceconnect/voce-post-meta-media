@@ -1,5 +1,5 @@
 /*global window,jQuery,wp */
-var MediaModal = function (options) {
+var MediaModal = function (settings, options) {
   'use strict';
   this.settings = {
     calling_selector: false,
@@ -16,14 +16,15 @@ var MediaModal = function (options) {
     e.preventDefault();
 
     // Create the media frame.
-    frame = wp.media.frames.file_frame = wp.media({
-      title: jQuery(this).data('uploader_title'),
-      button: {
-        text: jQuery(this).data('uploader_button_text')
-      },
-      multiple: false
-    });
-		
+    frame = wp.media.frames.file_frame = wp.media(
+        jQuery.extend(true, {
+            title: jQuery(this).data('uploader_title'),
+            button: {
+                text: jQuery(this).data('uploader_button_text')
+            }
+        }, that.options)
+	);
+
     // Set filterable state to uploaded to get select to show (setting this
     // when creating the frame doesn't work)
     frame.on('toolbar:create:select', function(){
@@ -53,7 +54,8 @@ var MediaModal = function (options) {
   };
 
   this.init = function init() {
-    this.settings = jQuery.extend(this.settings, options);
+    jQuery.extend(this.settings, settings);
+	this.options = options;
     this.attachEvents();
   };
   this.init();

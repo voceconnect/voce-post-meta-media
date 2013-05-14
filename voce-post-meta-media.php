@@ -157,7 +157,19 @@ function voce_media_field_display( $field, $value, $post_id ) {
 			'var mm_%3$s = new MediaModal({
 				calling_selector : "#set-%1$s-%2$s-thumbnail",
 				cb : function(attachment){
-					var img_url = typeof attachment.sizes == "object" ? attachment.sizes.medium.url : attachment.icon;
+					var img_url = "";
+					if (typeof attachment.sizes != "object") {
+						img_url = attachment.icon;
+					}
+					else if (typeof attachment.sizes.medium != "undefined") {
+						img_url = attachment.sizes.medium.url;
+					}
+					else if (typeof attachment.sizes.thumbnail != "undefined") {
+						img_url = attachment.sizes.thumbnail.url;
+					}
+					else {
+						img_url = attachment.sizes.full.url;
+					}
 					VocePostMetaMedia.setAsThumbnail(attachment.id, img_url, "%2$s", "%1$s");
 				}
 			});',
