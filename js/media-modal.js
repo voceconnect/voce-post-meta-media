@@ -23,7 +23,7 @@ var MediaModal = function (settings, options) {
             text: jQuery(this).data('uploader_button_text')
           }
       }, that.options)
-	);
+    );
 
     // Set filterable state to uploaded to get select to show (setting this
     // when creating the frame doesn't work)
