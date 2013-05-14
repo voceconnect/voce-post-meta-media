@@ -55,7 +55,7 @@ var MediaModal = function (settings, options) {
 
   this.init = function init() {
     jQuery.extend(this.settings, settings);
-	this.options = options;
+    this.options = options;
     this.attachEvents();
   };
   this.init();
