@@ -156,8 +156,21 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		$modal_js = sprintf(
 			'var mm_%3$s = new MediaModal({
 				calling_selector : "#set-%1$s-%2$s-thumbnail",
-				cb : function(attachment){
-					var img_url = typeof attachment.sizes == "object" ? attachment.sizes.medium.url : attachment.icon;
+				cb : function(attachments){
+					var attachment = attachments[0];
+					var img_url = "";
+					if (typeof attachment.sizes != "object") {
+						img_url = attachment.icon;
+					}
+					else if (typeof attachment.sizes.medium != "undefined") {
+						img_url = attachment.sizes.medium.url;
+					}
+					else if (typeof attachment.sizes.thumbnail != "undefined") {
+						img_url = attachment.sizes.thumbnail.url;
+					}
+					else {
+						img_url = attachment.sizes.full.url;
+					}
 					VocePostMetaMedia.setAsThumbnail(attachment.id, img_url, "%2$s", "%1$s");
 				}
 			});',
@@ -173,7 +186,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	<p class="hide-if-no-js">%1$s</p>
 	<p class="hide-if-no-js">
 		<input class="hidden" type="hidden" id="%4$s" name="%4$s" value="%7$s"  />
-		<a title="%6$s" href="%2$s" id="set-%3$s-%4$s-thumbnail" class="%5$s" data-thumbnail_id="%7$s" data-uploader_title="%6$s" data-uploader_button_text="%6$s">%%s</a>
+		<a title="%6$s" href="%2$s" id="set-%3$s-%4$s-thumbnail" class="%5$s" data-attachment_ids="%7$s" data-uploader_title="%6$s" data-uploader_button_text="%6$s">%%s</a>
 	</p>';
 	$set_thumbnail_link = sprintf( $format_string, voce_field_label_display( $field ), $image_library_url, $post_type, $field->id, $url_class, sprintf( esc_attr( 'Set %s' ), $field->label ), $value );
 	$content = sprintf( $set_thumbnail_link, sprintf( esc_html( 'Set %s' ), $field->label ) );
