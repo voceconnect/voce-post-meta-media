@@ -21,7 +21,7 @@ window.VocePostMetaMedia = {
     * @param integer id
     */
 	setThumbnailID: function(thumb_id, id, post_type){
-		jQuery('#set-'+ post_type +'-'+ id +'-thumbnail').data('thumbnail_id', thumb_id);
+		jQuery('#set-'+ post_type +'-'+ id +'-thumbnail').data('attachment_ids', thumb_id);
 		var field = jQuery('input#'+id+'.hidden');
 		if ( field.size() > 0 ) {
 			jQuery(field).val(thumb_id);
@@ -41,7 +41,7 @@ window.VocePostMetaMedia = {
 		if ( field.size() > 0 ) {
 			jQuery(field).val('');
 		}
-		jQuery("#set-" + post_type + "-" + id + "-thumbnail").html('Set ' + label).data('thumbnail_id', '');
+		jQuery("#set-" + post_type + "-" + id + "-thumbnail").html('Set ' + label).data('attachment_ids', '');
 		jQuery("#remove-" + post_type + "-" + id + "-thumbnail").hide();
 	},
 
