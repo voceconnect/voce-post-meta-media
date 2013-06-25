@@ -3,7 +3,7 @@
   Plugin Name: Voce Meta Media
   Plugin URI: http://vocecommunications.com
   Description: Extends Voce Post Meta with a media picker field
-  Version: 0.1
+  Version: 1.0
   Author: markparolisi, voceplatforms
   Author URI: http://vocecommunications.com
   License: GPL2
@@ -11,6 +11,10 @@
 
 class Voce_Post_Meta_Media {
 
+	/**
+	 * setup plugin
+	 * @global string $wp_version
+	 */
 	public static function initialize() {
 		global $wp_version;
 
@@ -44,7 +48,6 @@ class Voce_Post_Meta_Media {
 	public static function action_admin_enqueue_scripts( $hook ) {
 		global $wp_version;
 
-		// only load on select pages
 		if ( ! in_array( $hook, array( 'post-new.php', 'post.php', 'media-upload-popup' ) ) )
 			return;
 
@@ -132,6 +135,16 @@ class Voce_Post_Meta_Media {
 
 Voce_Post_Meta_Media::initialize();
 
+/**
+ * 
+ * @global type $content_width
+ * @global type $_wp_additional_image_sizes
+ * @global type $wp_version
+ * @param type $field
+ * @param type $value
+ * @param type $post_id
+ * @return type
+ */
 function voce_media_field_display( $field, $value, $post_id ) {
 	if ( ! class_exists( 'Voce_Meta_API' ) ) {
 		return;

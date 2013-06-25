@@ -4,6 +4,7 @@
  *
  * @module MediaModal
  * @requires jQuery
+ * @author Mark Parolisi
  * @author Chris Scott
  * @author Gary Smirny
  *
@@ -100,6 +101,7 @@
  *     the items displayed
  *
  ***/
+/*global window,wp,jQuery*/
 var MediaModal = function (settings, render_options) {
   'use strict';
   this.settings = {
@@ -149,10 +151,9 @@ var MediaModal = function (settings, render_options) {
 
       // Select the attachments if we have any
       if ($caller.data('attachment_ids')) {        
-        var Attachment = wp.media.model.Attachment;
-        var selection = frame.state().get('selection');
-
-        var attachments = $caller.data('attachment_ids');
+        var Attachment = wp.media.model.Attachment,
+        selection = frame.state().get('selection'),
+        attachments = $caller.data('attachment_ids');
         if (typeof attachments == 'object') {
           jQuery.each(attachments, function(){
             selection.add(Attachment.get(this));
