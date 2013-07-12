@@ -187,7 +187,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 					VocePostMetaMedia.setAsThumbnail(attachment.id, img_url, "%2$s", "%1$s");
 				}
 			});',
-			$post_type, $field->id, md5( $field->id )
+			$post_type, $field->input_id, md5( $field->input_id )
 		);
 	}
 
@@ -198,10 +198,10 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$format_string = '
 	<p class="hide-if-no-js">%1$s</p>
 	<p class="hide-if-no-js">
-		<input class="hidden" type="hidden" id="%4$s" name="%4$s" value="%7$s"  />
+		<input class="hidden" type="hidden" id="%4$s" name="%8$s" value="%7$s"  />
 		<a title="%6$s" href="%2$s" id="set-%3$s-%4$s-thumbnail" class="%5$s" data-attachment_ids="%7$s" data-uploader_title="%6$s" data-uploader_button_text="%6$s">%%s</a>
 	</p>';
-	$set_thumbnail_link = sprintf( $format_string, voce_field_label_display( $field ), $image_library_url, $post_type, $field->id, $url_class, sprintf( esc_attr( 'Set %s' ), $field->label ), $value );
+	$set_thumbnail_link = sprintf( $format_string, voce_field_label_display( $field ), $image_library_url, $post_type, $field->input_id, $url_class, sprintf( esc_attr( 'Set %s' ), $field->label ), $value, $field->name );
 	$content = sprintf( $set_thumbnail_link, sprintf( esc_html( 'Set %s' ), $field->label ) );
 	$hide_remove = true;
 
