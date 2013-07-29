@@ -20,8 +20,8 @@ class Voce_Post_Meta_Media {
 
 		add_filter( 'meta_type_mapping', array( __CLASS__, 'meta_type_mapping' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'action_admin_enqueue_scripts' ) );
-		
-		if ( version_compare( $wp_version, '3.5', '<' ) ) {	
+
+		if ( version_compare( $wp_version, '3.5', '<' ) ) {
 			add_filter( 'attachment_fields_to_edit', array( __CLASS__, 'add_attachment_field' ), 20, 2 );
 		}
 	}
@@ -29,7 +29,7 @@ class Voce_Post_Meta_Media {
 	/**
 	 * @method meta_type_mapping
 	 * @param type $mapping
-	 * @return array 
+	 * @return array
 	 */
 	public static function meta_type_mapping( $mapping ) {
 		$mapping['media'] = array(
@@ -51,13 +51,13 @@ class Voce_Post_Meta_Media {
 		if ( ! in_array( $hook, array( 'post-new.php', 'post.php', 'media-upload-popup' ) ) )
 			return;
 
-		if ( version_compare( $wp_version, '3.5', '<' ) ) {	
+		if ( version_compare( $wp_version, '3.5', '<' ) ) {
 			add_thickbox();
 			wp_enqueue_script( 'vpm-featured-image', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'media-upload' ) );
 		} else { // 3.5+ media modal
 			wp_enqueue_media();
 			wp_enqueue_script( 'vpm-featured-image', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'set-post-thumbnail' ) );
-			wp_enqueue_script( 'vpm-featured-image-modal', self::plugins_url( 'js/media-modal.js', __FILE__ ), array( 'jquery', 'media-models' ) );				
+			wp_enqueue_script( 'vpm-featured-image-modal', self::plugins_url( 'js/media-modal.js', __FILE__ ), array( 'jquery', 'media-models' ) );
 		}
 	}
 
@@ -106,7 +106,7 @@ class Voce_Post_Meta_Media {
 	 * @method plugins_url
 	 * @param type $relative_path
 	 * @param type $plugin_path
-	 * @return string 
+	 * @return string
 	 */
 	public static function plugins_url( $relative_path, $plugin_path ) {
 		$template_dir = get_template_directory();
@@ -136,7 +136,7 @@ class Voce_Post_Meta_Media {
 Voce_Post_Meta_Media::initialize();
 
 /**
- * 
+ *
  * @global type $content_width
  * @global type $_wp_additional_image_sizes
  * @global type $wp_version
@@ -161,7 +161,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		// Use the old thickbox for versions prior to 3.5
 		$image_library_url = get_upload_iframe_src( 'image' );
 		// if TB_iframe is not moved to end of query string, thickbox will remove all query args after it.
-		$image_library_url = add_query_arg( array( 'context' => $field->id, 'meta_id' => $field->id, 'meta_label' => $field->label, 'TB_iframe' => 1 ), remove_query_arg( 'TB_iframe', $image_library_url ) );
+		$image_library_url = add_query_arg( array( 'context' => $field->get_input_id( ), 'meta_id' => $field->get_input_id( ), 'meta_label' => $field->label, 'TB_iframe' => 1 ), remove_query_arg( 'TB_iframe', $image_library_url ) );
 		$url_class = 'thickbox';
 	} else {
 		// Use the media modal for 3.5 and up
@@ -187,7 +187,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 					VocePostMetaMedia.setAsThumbnail(attachment.id, img_url, "%2$s", "%1$s");
 				}
 			});',
-			$post_type, $field->id, md5( $field->id )
+			$post_type, $field->get_input_id( ), md5( $field->get_input_id( ) )
 		);
 	}
 
@@ -198,21 +198,21 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$format_string = '
 	<p class="hide-if-no-js">%1$s</p>
 	<p class="hide-if-no-js">
-		<input class="hidden" type="hidden" id="%4$s" name="%4$s" value="%7$s"  />
+		<input class="hidden" type="hidden" id="%4$s" name="%8$s" value="%7$s"  />
 		<a title="%6$s" href="%2$s" id="set-%3$s-%4$s-thumbnail" class="%5$s" data-attachment_ids="%7$s" data-uploader_title="%6$s" data-uploader_button_text="%6$s">%%s</a>
 	</p>';
-	$set_thumbnail_link = sprintf( $format_string, voce_field_label_display( $field ), $image_library_url, $post_type, $field->id, $url_class, sprintf( esc_attr( 'Set %s' ), $field->label ), $value );
+	$set_thumbnail_link = sprintf( $format_string, voce_field_label_display( $field ), $image_library_url, $post_type, $field->get_input_id( ), $url_class, sprintf( esc_attr( 'Set %s' ), $field->label ), $value, $field->get_name( ) );
 	$content = sprintf( $set_thumbnail_link, sprintf( esc_html( 'Set %s' ), $field->label ) );
 	$hide_remove = true;
 
 	if ( $value && get_post( $value ) ) {
 		$old_content_width = $content_width;
 		$content_width = 266;
-		if ( ! isset( $_wp_additional_image_sizes["{$post_type}-{$field->id}-thumbnail"] ) ) {
+		if ( ! isset( $_wp_additional_image_sizes["{$post_type}-{$field->get_input_id( )}-thumbnail"] ) ) {
 			$thumbnail_html = wp_get_attachment_image( $value, array( $content_width, $content_width ), $icon );
 		}
 		else {
-			$thumbnail_html = wp_get_attachment_image( $value, "{$post_type}-{$field->id}-thumbnail", $icon );
+			$thumbnail_html = wp_get_attachment_image( $value, "{$post_type}-{$field->get_input_id( )}-thumbnail", $icon );
 		}
 
 		if ( ! empty( $thumbnail_html ) ) {
@@ -223,7 +223,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	}
 
 	$format_string = '<p class="hide-if-no-js"><a href="#" id="remove-%1$s-%2$s-thumbnail" class="%4$s" onclick="VocePostMetaMedia.remove(\'%2$s\', \'%1$s\', \'%3$s\');return false;">Remove %3$s</a></p>';
-	$content .= sprintf( $format_string, $post_type, $field->id, esc_html( $field->label ), $hide_remove ? 'hidden' : '' );
+	$content .= sprintf( $format_string, $post_type, $field->get_input_id( ), esc_html( $field->label ), $hide_remove ? 'hidden' : '' );
 
 	if ( version_compare( $wp_version, '3.5', '>=' ) ) {
 		$content .= sprintf( '<script>%s</script>', $modal_js );
