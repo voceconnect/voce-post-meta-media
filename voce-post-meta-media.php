@@ -57,7 +57,6 @@ class Voce_Post_Meta_Media {
 		} else { // 3.5+ media modal
 			wp_enqueue_media();
 			wp_enqueue_script( 'vpm-featured-image', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'set-post-thumbnail' ) );
-			wp_enqueue_script( 'vpm-featured-image-modal', self::plugins_url( 'js/media-modal.js', __FILE__ ), array( 'jquery', 'media-models' ) );
 		}
 	}
 
@@ -166,29 +165,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	} else {
 		// Use the media modal for 3.5 and up
 		$image_library_url = "#";
-		$modal_js = sprintf(
-			'var mm_%3$s = new MediaModal({
-				calling_selector : "#set-%1$s-%2$s-thumbnail",
-				cb : function(attachments){
-					var attachment = attachments[0];
-					var img_url = "";
-					if (typeof attachment.sizes != "object") {
-						img_url = attachment.icon;
-					}
-					else if (typeof attachment.sizes.medium != "undefined") {
-						img_url = attachment.sizes.medium.url;
-					}
-					else if (typeof attachment.sizes.thumbnail != "undefined") {
-						img_url = attachment.sizes.thumbnail.url;
-					}
-					else {
-						img_url = attachment.sizes.full.url;
-					}
-					VocePostMetaMedia.setAsThumbnail(attachment.id, img_url, "%2$s", "%1$s");
-				}
-			});',
-			$post_type, $field->get_input_id( ), md5( $field->get_input_id( ) )
-		);
+		$url_class = 'vpm-media';
 	}
 
 	// Get icon for type
@@ -225,10 +202,6 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$format_string = '<p class="hide-if-no-js"><a href="#" id="remove-%1$s-%2$s-thumbnail" class="%4$s" onclick="VocePostMetaMedia.remove(\'%2$s\', \'%1$s\', \'%3$s\');return false;">Remove %3$s</a></p>';
 	$content .= sprintf( $format_string, $post_type, $field->get_input_id( ), esc_html( $field->label ), $hide_remove ? 'hidden' : '' );
 	$content .= !empty( $field->description ) ? ('<br><span class="description">' . wp_kses( $field->description, Voce_Meta_API::GetInstance()->description_allowed_html ) . '</span>') : '';
-
-	if ( version_compare( $wp_version, '3.5', '>=' ) ) {
-		$content .= sprintf( '<script>%s</script>', $modal_js );
-	}
 
 	echo $content;
 }

@@ -1,61 +1,68 @@
-/*global window,document,jQuery*/
-window.VocePostMetaMedia = {
-	/**
-	 * Display the selected media in the post meta box
-	 * 
-	 * @method setThumbnailHTML
-	 * @param string html
-	 * @param integer id
-	 * @param string post_type
-	 */
-	setThumbnailHTML: function(thumb_url, id, post_type) {
-		jQuery('#set-' + post_type + '-' + id + '-thumbnail').html('<img src="' + unescape(thumb_url) + '" />');
-		jQuery('#remove-' + post_type + '-' + id + '-thumbnail').show();
-	},
-	/**
-	 * Populate the selected media ID in the hidden meta field
-	 *
-	 * @method setThumbnailID
-	 * @param integer thumb_id
-	 * @param integer id
-	 */
-	setThumbnailID: function(thumb_id, id, post_type) {
-		jQuery('#set-' + post_type + '-' + id + '-thumbnail').data('attachment_ids', thumb_id);
-		var field = jQuery('input#' + id + '.hidden');
-		if (field.size() > 0) {
-			jQuery(field).val(thumb_id);
-		}
-	},
-	/**
-	 * Unset the value in the hidden field
-	 * Remove the displayed image in the post meta box
-	 *
-	 * @method remove
-	 * @param integer id
-	 * @param post_type
-	 */
-	remove: function(id, post_type, label) {
-		var field = jQuery('input#' + id + '.hidden');
-		if (field.size() > 0) {
-			jQuery(field).val('');
-		}
-		jQuery("#set-" + post_type + "-" + id + "-thumbnail").html('Set ' + label).data('attachment_ids', '');
-		jQuery("#remove-" + post_type + "-" + id + "-thumbnail").hide();
-	},
-	/**
-	 * Signal the selected media contents to the parent window (from TB)
-	 *
-	 * @method setAsThumbnail
-	 * @param integer thumb_id
-	 * @param integer id
-	 * @param string post_type
-	 * @param string img_html
-	 */
-	setAsThumbnail: function(thumb_id, thumb_url, id, post_type) {
-		var win = window.dialogArguments || opener || parent || top;
-		win.tb_remove();
-		win.VocePostMetaMedia.setThumbnailID(thumb_id, id, post_type);
-		win.VocePostMetaMedia.setThumbnailHTML(escape(thumb_url), id, post_type);
-	}
+;(function ( $, window, document, undefined ) {
 
-};
+    var pluginName = "PostMetaMedia",
+        defaults   = {
+            propertyName: "value"
+        }
+    ;
+
+    function PostMetaMedia ( element, options ) {
+        this.$element = $(element);
+        this.settings = $.extend( {}, defaults, options );
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
+    }
+
+    PostMetaMedia.prototype = {
+
+        init: function () {
+            this.listen();
+        },
+
+        listen: function() {
+            this.$element.on( 'click', this.openModal );
+        },
+
+        openModal: function() {
+            var frameOptions = {};
+            this.modal = wp.media.frames.file_frame = wp.media(frameOptions);
+            this.modalListen();
+        },
+
+        modalListen: function() {
+            this.modal.on('toolbar:create:select', function() {
+                return _this.frame.state().set('filterable', 'uploaded');
+            });
+
+            this.modal.on('select', function() {
+                var attachments;
+                attachments = [];
+                $.each(_this.frame.state().get('selection').models, function() {
+                    return attachments.push(this.toJSON());
+                });
+                return _this.attachImage(attachments, $element);
+            });
+
+            this.modal.on('open activate', function() {
+                if ($element.data('attachment_ids')) {
+                    return $element.data('attachment_ids', '');
+                }
+            });
+        }
+
+    };
+
+    $.fn[ 'PostMetaMedia' ] = function ( options ) {
+        return this.each(function() {
+            if ( !$.data( this, 'PostMetaMedia' ) ) {
+                $.data( this, 'PostMetaMedia', new PostMetaMedia( this, options ) );
+            }
+        });
+    };
+
+    $(document).ready(function(){
+        $('.vpm-media').PostMetaMedia({});
+    });
+
+})( jQuery, window, document );
