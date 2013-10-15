@@ -3,7 +3,6 @@
     var pluginName = "PostMetaMedia",
         defaults   = {
             parentContainer: false,
-            imageContainer:  false,
             inputField:      false
         }
     ;
@@ -26,11 +25,7 @@
             var _this = this;
             this.$element.on( 'click', function(e) {
                 e.preventDefault();
-                if (_this.hasImage) {
-                    _this.removeImage();
-                } else {
-                    _this.openModal();
-                }
+                _this.openModal();
             } );
         },
 
@@ -49,19 +44,29 @@
         modalListen: function() {
             var _this = this;
             this.modal.on('toolbar:create:select', function() {
-                return _this.modal.state().set('filterable', 'uploaded');
+                _this.modal.state().set('filterable', 'uploaded');
             });
             this.modal.on('select', function() {
                 var attachments;
                 attachments = [];
                 $.each(_this.modal.state().get('selection').models, function() {
-                    return attachments.push(this.toJSON());
+                    attachments.push(this.toJSON());
                 });
-                return _this.attachImage(attachments);
+                _this.attachImage(attachments);
             });
             this.modal.on('open activate', function() {
-                if (_this.$element.data('attachment_ids')) {
-                    return _this.$element.data('attachment_ids', '');
+                var attachments = _this.$element.data('attachment_ids');
+                if ( attachments ) {
+                    var Attachment = wp.media.model.Attachment;
+                    var selection = _this.modal.state().get('selection');
+                    if (typeof attachments == 'object') {
+                        jQuery.each(attachments, function(){
+                            selection.add(Attachment.get(this));
+                        });
+                    }
+                    else {
+                        selection.add(Attachment.get(attachments));
+                    }
                 }
             });
         },
@@ -91,26 +96,14 @@
                     $input.eq(0).val(id);
                 }
             }
+            this.$element.data('attachment_ids', id);
         },
 
         setThumbHTML: function( url ) {
-            var container = this.settings.imageContainer;
-            var parent = this.settings.parentContainer;
-            if ( container && parent ) {
-                var $parent = this.$element.parents(parent).eq(0);
-                var $container = $parent.find(container);
-                if ( $container.length ) {
-                    var content = '';
-                    if ( url ) {
-                        var $img = $('<img>');
-                        $img.css({'max-width':'100%'});
-                        $img.attr('src', url);
-                        content = $img;
-                    }
-                    $container.eq(0).html(content);
-                }
-            }
-            this.$element.text('Remove Image');
+            var $img = $('<img>');
+            $img.css({'max-width':'100%'});
+            $img.attr('src', url);
+            this.$element.html($img);
         }
 
     };
@@ -126,7 +119,6 @@
     $(document).ready(function(){
         $('.vpm-media').PostMetaMedia({
             parentContainer: '.meta-media-field',
-            imageContainer:  '.image-container',
             inputField:      '.thumb-id'
         });
     });

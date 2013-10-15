@@ -176,7 +176,6 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$format_string = '
 		<p>%1$s</p>
 		<input class="hidden thumb-id" type="hidden" id="%4$s" name="%8$s" value="%7$s" />
-		<div class="image-container"></div>
 		<a title="%6$s" href="%2$s" id="set-%3$s-%4$s-thumbnail" class="%5$s" data-attachment_ids="%7$s" data-uploader_title="%6$s" data-uploader_button_text="%6$s">%%s</a>
 	';
 
