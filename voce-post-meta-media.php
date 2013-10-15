@@ -172,12 +172,14 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$mime_type = $value_post->post_mime_type;
 	$icon = ( strpos( $mime_type, 'image' ) ) ? false : true;
 	$content = '<div class="meta-media-field hide-if-no-js">';
+
 	$format_string = '
 		<p>%1$s</p>
 		<input class="hidden thumb-id" type="hidden" id="%4$s" name="%8$s" value="%7$s" />
 		<div class="image-container"></div>
 		<a title="%6$s" href="%2$s" id="set-%3$s-%4$s-thumbnail" class="%5$s" data-attachment_ids="%7$s" data-uploader_title="%6$s" data-uploader_button_text="%6$s">%%s</a>
 	';
+
 	ob_start();
 	voce_field_label_display( $field );
 	$label = ob_get_clean();
@@ -203,8 +205,6 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		$content_width = $old_content_width;
 	}
 
-	$format_string = '<a href="#" id="remove-%1$s-%2$s-thumbnail" class="%4$s" onclick="VocePostMetaMedia.remove(\'%2$s\', \'%1$s\', \'%3$s\');return false;">Remove %3$s</a>';
-	$content .= sprintf( $format_string, $post_type, $field->get_input_id( ), esc_html( $field->label ), $hide_remove ? 'hidden' : '' );
 	$content .= !empty( $field->description ) ? ('<br><span class="description">' . wp_kses( $field->description, Voce_Meta_API::GetInstance()->description_allowed_html ) . '</span>') : '';
 
 	$content .= '</div>';

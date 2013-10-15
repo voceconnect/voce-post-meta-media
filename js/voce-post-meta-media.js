@@ -36,9 +36,9 @@
 
         openModal: function() {
             var frameOptions = {
-                title: 'TITLE HERE',
+                title: this.$element.data('uploader_title'),
                 button: {
-                  text: 'BUTTON TEXT'
+                  text: this.$element.data('uploader_button_text')
                 }
             };
             this.modal = wp.media.frames.file_frame = wp.media(frameOptions);
@@ -76,6 +76,7 @@
         removeImage: function() {
             this.setThumbID('');
             this.setThumbHTML('');
+            // TODO Make this original string
             this.$element.text('Set Image');
             this.hasImage = false;
         },
