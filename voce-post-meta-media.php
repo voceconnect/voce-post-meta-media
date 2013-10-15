@@ -175,7 +175,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 
 	$format_string = '
 		<p>%1$s</p>
-		<input class="hidden thumb-id" type="hidden" id="%4$s" name="%8$s" value="%7$s" />
+		<input class="hidden vpm-id" type="hidden" id="%4$s" name="%8$s" value="%7$s" />
 		<a title="%6$s" href="%2$s" id="set-%3$s-%4$s-thumbnail" class="vpm-add %5$s" data-attachment_ids="%7$s">%%s</a>
 	';
 

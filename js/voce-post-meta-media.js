@@ -4,15 +4,12 @@
         defaults   = {
             addSelector:    '.vpm-add',
             removeSelector: '.vpm-remove',
-            inputSelector:  '.thumb-id',
+            inputSelector:  '.vpm-id',
         }
     ;
 
     function PostMetaMedia ( element, options ) {
         this.$element = $(element);
-        this.$addLink = this.$element.find('.vpm-add');
-        this.$removeLink = this.$element.find('.vpm-remove');
-        this.$inputField = this.$element.find('.thumb-id');
         this.settings = $.extend( {}, defaults, options );
         this._defaults = defaults;
         this._name = pluginName;
@@ -22,6 +19,9 @@
     PostMetaMedia.prototype = {
 
         init: function () {
+            this.$addLink    = this.$element.find(this.settings.addSelector);
+            this.$removeLink = this.$element.find(this.settings.removeSelector);
+            this.$inputField = this.$element.find(this.settings.inputSelector);
             this.listen();
         },
 
@@ -31,14 +31,11 @@
                 e.preventDefault();
                 _this.openModal();
             } );
-
-            if ( this.$removeLink.length ) {
-                this.$removeLink.on( 'click', function(e) {
-                    e.preventDefault();
-                    _this.removeImage();
-                    $(this).hide();
-                } );
-            }
+            this.$removeLink.on( 'click', function(e) {
+                e.preventDefault();
+                _this.removeImage();
+                $(this).hide();
+            } );
         },
 
         openModal: function() {
@@ -59,28 +56,36 @@
                 _this.modal.state().set('filterable', 'uploaded');
             });
             this.modal.on('select', function() {
-                var attachments;
-                attachments = [];
-                $.each(_this.modal.state().get('selection').models, function() {
-                    attachments.push(this.toJSON());
-                });
-                _this.attachImage(attachments);
+                _this.getModalAttachment();
             });
             this.modal.on('open activate', function() {
-                var attachments = _this.$element.data('attachment_ids');
-                if ( attachments ) {
-                    var Attachment = wp.media.model.Attachment;
-                    var selection = _this.modal.state().get('selection');
-                    if (typeof attachments == 'object') {
-                        jQuery.each(attachments, function(){
-                            selection.add(Attachment.get(this));
-                        });
-                    }
-                    else {
-                        selection.add(Attachment.get(attachments));
-                    }
-                }
+                _this.attachmentToModal();
             });
+        },
+
+        getModalAttachment: function() {
+            var attachments = [];
+            var selections = this.modal.state().get('selection').models;
+            $.each( selections, function() {
+                attachments.push(this.toJSON());
+            });
+            this.attachImage(attachments);
+        },
+
+        attachmentToModal: function() {
+            var attachments = this.$element.data('attachment_ids');
+            if ( attachments ) {
+                var Attachment = wp.media.model.Attachment;
+                var selection = this.modal.state().get('selection');
+                if (typeof attachments == 'object') {
+                    jQuery.each(attachments, function(){
+                        selection.add(Attachment.get(this));
+                    });
+                }
+                else {
+                    selection.add(Attachment.get(attachments));
+                }
+            }
         },
 
         attachImage: function( attachments ) {
@@ -99,9 +104,7 @@
         },
 
         setThumbID: function( id ) {
-            if ( this.$inputField.length ) {
-                this.$inputField.eq(0).val(id);
-            }
+            this.$inputField.val(id);
             this.$element.data('attachment_ids', id);
         },
 
