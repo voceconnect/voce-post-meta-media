@@ -198,7 +198,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		}
 
 		if ( ! empty( $thumbnail_html ) ) {
-			$content = '<div class="meta-media-field hide-if-no-js">';
+			$content = '<div class="vpm-media-field hide-if-no-js">';
 			$content .= sprintf( $set_thumbnail_link, $thumbnail_html );
 			$hide_remove = false;
 		}
