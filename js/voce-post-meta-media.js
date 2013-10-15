@@ -2,13 +2,17 @@
 
     var pluginName = "PostMetaMedia",
         defaults   = {
-            parentContainer: false,
-            inputField:      false
+            addSelector:    '.vpm-add',
+            removeSelector: '.vpm-remove',
+            inputSelector:  '.thumb-id',
         }
     ;
 
     function PostMetaMedia ( element, options ) {
         this.$element = $(element);
+        this.$addLink = this.$element.find('.vpm-add');
+        this.$removeLink = this.$element.find('.vpm-remove');
+        this.$inputField = this.$element.find('.thumb-id');
         this.settings = $.extend( {}, defaults, options );
         this._defaults = defaults;
         this._name = pluginName;
@@ -23,22 +27,17 @@
 
         listen: function() {
             var _this = this;
-            this.$element.on( 'click', function(e) {
+            this.$addLink.on( 'click', function(e) {
                 e.preventDefault();
                 _this.openModal();
             } );
 
-            var parent = this.settings.parentContainer;
-            if ( parent ) {
-                var $parent = this.$element.parents(parent).eq(0);
-                var $remove = $parent.find('.vpm-remove');
-                if ( $remove.length ) {
-                    $remove.on( 'click', function(e) {
-                        e.preventDefault();
-                        _this.removeImage();
-                        $(this).hide();
-                    } );
-                }
+            if ( this.$removeLink.length ) {
+                this.$removeLink.on( 'click', function(e) {
+                    e.preventDefault();
+                    _this.removeImage();
+                    $(this).hide();
+                } );
             }
         },
 
@@ -89,31 +88,19 @@
             this.setThumbID(attachment.id);
             this.setThumbHTML(attachment.sizes.full.url);
             this.hasImage = true;
-
-            var parent = this.settings.parentContainer;
-            if ( parent ) {
-                var $parent = this.$element.parents(parent).eq(0);
-                var $remove = $parent.find('.vpm-remove');
-                $remove.show();
-            }
+            this.$removeLink.show();
         },
 
         removeImage: function() {
             this.setThumbID('');
             this.setThumbHTML('');
-            this.$element.html(this.$element.data('uploader_button_text'));
+            this.$addLink.html(this.$element.data('uploader_button_text'));
             this.hasImage = false;
         },
 
         setThumbID: function( id ) {
-            var input = this.settings.inputField;
-            var parent = this.settings.parentContainer;
-            if ( input && parent ) {
-                var $parent = this.$element.parents(parent).eq(0);
-                var $input = $parent.find(input);
-                if ( $input.length ) {
-                    $input.eq(0).val(id);
-                }
+            if ( this.$inputField.length ) {
+                this.$inputField.eq(0).val(id);
             }
             this.$element.data('attachment_ids', id);
         },
@@ -122,7 +109,7 @@
             var $img = $('<img>');
             $img.css({'max-width':'100%'});
             $img.attr('src', url);
-            this.$element.html($img);
+            this.$addLink.html($img);
         }
 
     };
@@ -136,10 +123,7 @@
     };
 
     $(document).ready(function(){
-        $('.vpm-media').PostMetaMedia({
-            parentContainer: '.vpm-media-field',
-            inputField:      '.thumb-id'
-        });
+        $('.vpm-media-field').PostMetaMedia({});
     });
 
 })( jQuery, window, document );
