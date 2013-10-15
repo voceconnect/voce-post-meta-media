@@ -2,8 +2,9 @@
 
     var pluginName = "PostMetaMedia",
         defaults   = {
-            imageContainer: false,
-            inputField:     false
+            parentContainer: false,
+            imageContainer:  false,
+            inputField:      false
         }
     ;
 
@@ -25,7 +26,11 @@
             var _this = this;
             this.$element.on( 'click', function(e) {
                 e.preventDefault();
-                _this.openModal();
+                if (_this.hasImage) {
+                    _this.removeImage();
+                } else {
+                    _this.openModal();
+                }
             } );
         },
 
@@ -43,11 +48,9 @@
 
         modalListen: function() {
             var _this = this;
-
             this.modal.on('toolbar:create:select', function() {
                 return _this.modal.state().set('filterable', 'uploaded');
             });
-
             this.modal.on('select', function() {
                 var attachments;
                 attachments = [];
@@ -56,7 +59,6 @@
                 });
                 return _this.attachImage(attachments);
             });
-
             this.modal.on('open activate', function() {
                 if (_this.$element.data('attachment_ids')) {
                     return _this.$element.data('attachment_ids', '');
@@ -68,12 +70,22 @@
             var attachment = attachments[0];
             this.setThumbID(attachment.id);
             this.setThumbHTML(attachment.sizes.full.url);
+            this.hasImage = true;
+        },
+
+        removeImage: function() {
+            this.setThumbID('');
+            this.setThumbHTML('');
+            this.$element.text('Set Image');
+            this.hasImage = false;
         },
 
         setThumbID: function( id ) {
             var input = this.settings.inputField;
-            if ( input ) {
-                var $input = this.$element.siblings(input);
+            var parent = this.settings.parentContainer;
+            if ( input && parent ) {
+                var $parent = this.$element.parents(parent).eq(0);
+                var $input = $parent.find(input);
                 if ( $input.length ) {
                     $input.eq(0).val(id);
                 }
@@ -82,15 +94,22 @@
 
         setThumbHTML: function( url ) {
             var container = this.settings.imageContainer;
-            if ( container ) {
-                var $container = this.$element.siblings(container);
+            var parent = this.settings.parentContainer;
+            if ( container && parent ) {
+                var $parent = this.$element.parents(parent).eq(0);
+                var $container = $parent.find(container);
                 if ( $container.length ) {
-                    var $img = $('<img>');
-                    $img.css({'max-width':'100%'});
-                    $img.attr('src', url);
-                    $container.eq(0).html($img);
+                    var content = '';
+                    if ( url ) {
+                        var $img = $('<img>');
+                        $img.css({'max-width':'100%'});
+                        $img.attr('src', url);
+                        content = $img;
+                    }
+                    $container.eq(0).html(content);
                 }
             }
+            this.$element.text('Remove Image');
         }
 
     };
@@ -105,8 +124,9 @@
 
     $(document).ready(function(){
         $('.vpm-media').PostMetaMedia({
-            imageContainer: '.image-container',
-            inputField: '.thumb-id'
+            parentContainer: '.meta-media-field',
+            imageContainer:  '.image-container',
+            inputField:      '.thumb-id'
         });
     });
 
