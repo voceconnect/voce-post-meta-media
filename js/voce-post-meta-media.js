@@ -1,18 +1,15 @@
 ;(function ( $, window, document, undefined ) {
 
-    var pluginName = "PostMetaMedia",
-        defaults   = {
-            addSelector:    '.vpm-add',
-            removeSelector: '.vpm-remove',
-            inputSelector:  '.vpm-id',
-        }
-    ;
+    var defaults   = {
+        addSelector:    '.vpm-add',
+        removeSelector: '.vpm-remove',
+        inputSelector:  '.vpm-id',
+    };
 
     function PostMetaMedia ( element, options ) {
         this.$element = $(element);
         this.settings = $.extend( {}, defaults, options );
         this._defaults = defaults;
-        this._name = pluginName;
         this.init();
     }
 
@@ -78,7 +75,7 @@
                 var Attachment = wp.media.model.Attachment;
                 var selection = this.modal.state().get('selection');
                 if (typeof attachments == 'object') {
-                    jQuery.each(attachments, function(){
+                    $.each(attachments, function(){
                         selection.add(Attachment.get(this));
                     });
                 }
