@@ -8,9 +8,9 @@
 
     function PostMetaMedia ( element, options ) {
         this.$element = $(element);
-        this.settings = $.extend( {}, defaults, options );
-        this._defaults = defaults;
-        this._name = pluginName;
+        //this.settings = $.extend( {}, defaults, options );
+        //this._defaults = defaults;
+        //this._name = pluginName;
         this.init();
     }
 
@@ -21,34 +21,50 @@
         },
 
         listen: function() {
-            this.$element.on( 'click', this.openModal );
+            _this = this;
+            this.$element.on( 'click', function(e) {
+                e.preventDefault();
+                _this.openModal();
+            } );
         },
 
         openModal: function() {
-            var frameOptions = {};
+            var frameOptions = {
+                title: 'TITLE HERE',
+                button: {
+                  text: 'BUTTON TEXT'
+                }
+            };
             this.modal = wp.media.frames.file_frame = wp.media(frameOptions);
             this.modalListen();
+            this.modal.open();
         },
 
         modalListen: function() {
+            _this = this;
+
             this.modal.on('toolbar:create:select', function() {
-                return _this.frame.state().set('filterable', 'uploaded');
+                return _this.modal.state().set('filterable', 'uploaded');
             });
 
             this.modal.on('select', function() {
                 var attachments;
                 attachments = [];
-                $.each(_this.frame.state().get('selection').models, function() {
+                $.each(_this.modal.state().get('selection').models, function() {
                     return attachments.push(this.toJSON());
                 });
-                return _this.attachImage(attachments, $element);
+                return _this.attachImage(attachments);
             });
 
             this.modal.on('open activate', function() {
-                if ($element.data('attachment_ids')) {
-                    return $element.data('attachment_ids', '');
+                if (_this.$element.data('attachment_ids')) {
+                    return _this.$element.data('attachment_ids', '');
                 }
             });
+        },
+
+        attachImage: function( attachments ) {
+
         }
 
     };
