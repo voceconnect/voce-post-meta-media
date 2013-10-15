@@ -198,11 +198,15 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		}
 
 		if ( ! empty( $thumbnail_html ) ) {
-			$content = sprintf( $set_thumbnail_link, $thumbnail_html );
+			$content = '<div class="meta-media-field hide-if-no-js">';
+			$content .= sprintf( $set_thumbnail_link, $thumbnail_html );
 			$hide_remove = false;
 		}
 		$content_width = $old_content_width;
 	}
+
+	$format_string = '<p class="hide-if-no-js"><a href="#" id="remove-%1$s-%2$s-thumbnail" class="vpm-remove %4$s">Remove %3$s</a></p>';
+	$content .= sprintf( $format_string, $post_type, $field->get_input_id( ), esc_html( $field->label ), $hide_remove ? 'hidden' : '' );
 
 	$content .= !empty( $field->description ) ? ('<br><span class="description">' . wp_kses( $field->description, Voce_Meta_API::GetInstance()->description_allowed_html ) . '</span>') : '';
 

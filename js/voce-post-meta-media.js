@@ -27,6 +27,18 @@
                 e.preventDefault();
                 _this.openModal();
             } );
+
+            var parent = this.settings.parentContainer;
+            if ( parent ) {
+                var $parent = this.$element.parents(parent).eq(0);
+                var $remove = $parent.find('.vpm-remove');
+                if ( $remove.length ) {
+                    $remove.on( 'click', function(e) {
+                        e.preventDefault();
+                        _this.removeImage();
+                    } );
+                }
+            }
         },
 
         openModal: function() {
@@ -82,7 +94,7 @@
             this.setThumbID('');
             this.setThumbHTML('');
             // TODO Make this original string
-            this.$element.text('Set Image');
+            this.$element.html('Set Image');
             this.hasImage = false;
         },
 
