@@ -36,6 +36,7 @@
                     $remove.on( 'click', function(e) {
                         e.preventDefault();
                         _this.removeImage();
+                        $(this).hide();
                     } );
                 }
             }
@@ -88,13 +89,19 @@
             this.setThumbID(attachment.id);
             this.setThumbHTML(attachment.sizes.full.url);
             this.hasImage = true;
+
+            var parent = this.settings.parentContainer;
+            if ( parent ) {
+                var $parent = this.$element.parents(parent).eq(0);
+                var $remove = $parent.find('.vpm-remove');
+                $remove.show();
+            }
         },
 
         removeImage: function() {
             this.setThumbID('');
             this.setThumbHTML('');
-            // TODO Make this original string
-            this.$element.html('Set Image');
+            this.$element.html(this.$element.data('uploader_button_text'));
             this.hasImage = false;
         },
 
@@ -130,7 +137,7 @@
 
     $(document).ready(function(){
         $('.vpm-media').PostMetaMedia({
-            parentContainer: '.meta-media-field',
+            parentContainer: '.vpm-media-field',
             inputField:      '.thumb-id'
         });
     });

@@ -171,7 +171,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	// Get icon for type
 	$mime_type = $value_post->post_mime_type;
 	$icon = ( strpos( $mime_type, 'image' ) ) ? false : true;
-	$content = '<div class="meta-media-field hide-if-no-js">';
+	$content = '<div class="vpm-media-field hide-if-no-js">';
 
 	$format_string = '
 		<p>%1$s</p>
