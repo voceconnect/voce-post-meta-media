@@ -74,7 +74,6 @@
             var input = this.settings.inputField;
             if ( input ) {
                 var $input = this.$element.siblings(input);
-                console.log($input);
                 if ( $input.length ) {
                     $input.eq(0).val(id);
                 }
@@ -86,7 +85,10 @@
             if ( container ) {
                 var $container = this.$element.siblings(container);
                 if ( $container.length ) {
-                    $container.eq(0).html($('<img src="'+url+'">'));
+                    var $img = $('<img>');
+                    $img.css({'max-width':'100%'});
+                    $img.attr('src', url);
+                    $container.eq(0).html($img);
                 }
             }
         }
