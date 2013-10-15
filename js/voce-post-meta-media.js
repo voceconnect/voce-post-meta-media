@@ -2,15 +2,16 @@
 
     var pluginName = "PostMetaMedia",
         defaults   = {
-            propertyName: "value"
+            imageContainer: false,
+            inputField:     false
         }
     ;
 
     function PostMetaMedia ( element, options ) {
         this.$element = $(element);
-        //this.settings = $.extend( {}, defaults, options );
-        //this._defaults = defaults;
-        //this._name = pluginName;
+        this.settings = $.extend( {}, defaults, options );
+        this._defaults = defaults;
+        this._name = pluginName;
         this.init();
     }
 
@@ -21,7 +22,7 @@
         },
 
         listen: function() {
-            _this = this;
+            var _this = this;
             this.$element.on( 'click', function(e) {
                 e.preventDefault();
                 _this.openModal();
@@ -41,7 +42,7 @@
         },
 
         modalListen: function() {
-            _this = this;
+            var _this = this;
 
             this.modal.on('toolbar:create:select', function() {
                 return _this.modal.state().set('filterable', 'uploaded');
@@ -64,7 +65,30 @@
         },
 
         attachImage: function( attachments ) {
+            var attachment = attachments[0];
+            this.setThumbID(attachment.id);
+            this.setThumbHTML(attachment.sizes.full.url);
+        },
 
+        setThumbID: function( id ) {
+            var input = this.settings.inputField;
+            if ( input ) {
+                var $input = this.$element.siblings(input);
+                console.log($input);
+                if ( $input.length ) {
+                    $input.eq(0).val(id);
+                }
+            }
+        },
+
+        setThumbHTML: function( url ) {
+            var container = this.settings.imageContainer;
+            if ( container ) {
+                var $container = this.$element.siblings(container);
+                if ( $container.length ) {
+                    $container.eq(0).html($('<img src="'+url+'">'));
+                }
+            }
         }
 
     };
@@ -78,7 +102,10 @@
     };
 
     $(document).ready(function(){
-        $('.vpm-media').PostMetaMedia({});
+        $('.vpm-media').PostMetaMedia({
+            imageContainer: '.image-container',
+            inputField: '.thumb-id'
+        });
     });
 
 })( jQuery, window, document );
