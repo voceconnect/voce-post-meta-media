@@ -44,7 +44,7 @@
                   text: this.fieldLabel
                 }
             };
-            var options = $.extend( defaultOptions, this.settings.modalOptions );
+            var options = $.extend( {}, defaultOptions, this.settings.modalOptions );
             this.modal = wp.media.frames.file_frame = wp.media(options);
             this.modalListen();
             this.modal.open();
