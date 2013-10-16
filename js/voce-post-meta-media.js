@@ -97,7 +97,7 @@
         removeImage: function() {
             this.setThumbID('');
             this.setThumbHTML('');
-            this.$addLink.html(this.$element.data('label'));
+            this.$addLink.html(this.fieldLabel);
             this.hasImage = false;
         },
 
