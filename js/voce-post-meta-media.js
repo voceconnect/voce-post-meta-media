@@ -37,9 +37,9 @@
 
         openModal: function() {
             var frameOptions = {
-                title: this.$element.data('uploader_title'),
+                title: this.$element.data('label'),
                 button: {
-                  text: this.$element.data('uploader_button_text')
+                  text: this.$element.data('label')
                 }
             };
             this.modal = wp.media.frames.file_frame = wp.media(frameOptions);
@@ -96,7 +96,7 @@
         removeImage: function() {
             this.setThumbID('');
             this.setThumbHTML('');
-            this.$addLink.html(this.$element.data('uploader_button_text'));
+            this.$addLink.html(this.$element.data('label'));
             this.hasImage = false;
         },
 

@@ -102,13 +102,12 @@ function voce_media_field_display( $field, $value, $post_id ) {
 
 	$field_id     = $field->get_input_id();
 	$field_name   = $field->get_name();
-	$label        = 'Set ' . $field->label;
-	$link_content = esc_html($label);
+	$label_add    = 'Set ' . $field->label;
+	$link_content = esc_html($label_add);
 	$hide_remove  = true;
 	$data_vars    = array();
 	$field_data   = array(
-		'uploader_title'       => $label,
-		'uploader_button_text' => $label
+		'label' => $label_add
 	);
 
 	// Prepare data attributes
@@ -132,7 +131,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		<p><?php voce_field_label_display( $field ); ?></p>
 		<p>
 			<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value ); ?>" />
-			<a title="<?php esc_attr( $label ); ?>" href="#" class="vpm-add"><?php echo $link_content; ?></a>
+			<a title="<?php esc_attr( $label_add ); ?>" href="#" class="vpm-add"><?php echo $link_content; ?></a>
 		</p>
 		<p><a href="#" class="vpm-remove <?php echo ( $hide_remove ) ? 'hidden' : ''; ?>">Remove <?php echo esc_html( $field->label ); ?></a></p>
 	</div>
