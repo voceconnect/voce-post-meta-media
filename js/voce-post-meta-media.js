@@ -3,7 +3,7 @@
     var defaults   = {
         addSelector:    '.vpm-add',
         removeSelector: '.vpm-remove',
-        inputSelector:  '.vpm-id',
+        inputSelector:  '.vpm-id'
     };
 
     function PostMetaMedia ( element, options ) {
