@@ -103,18 +103,9 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$field_id     = $field->get_input_id();
 	$field_name   = $field->get_name();
 	$label_add    = 'Set ' . $field->label;
+	$label_remove = 'Remove ' . $field->label;
 	$link_content = esc_html($label_add);
 	$hide_remove  = true;
-	$data_vars    = array();
-	$field_data   = array(
-		'label' => $label_add
-	);
-
-	// Prepare data attributes
-	foreach ( $field_data as $key => $val ) {
-		if ( $val )
-			$data_vars[] = sprintf( 'data-%s="%s"', $key, esc_attr( $val ) );
-	}
 
 	// If value is set get thumbnail to display and show remove button
 	if ( $value && get_post( $value ) ) {
@@ -127,13 +118,19 @@ function voce_media_field_display( $field, $value, $post_id ) {
 
 ?>
 
-	<div class="vpm-media-field hide-if-no-js" <?php echo implode(' ', $data_vars); ?>>
+	<div class="vpm-media-field hide-if-no-js">
 		<p><?php voce_field_label_display( $field ); ?></p>
 		<p>
 			<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value ); ?>" />
-			<a title="<?php esc_attr( $label_add ); ?>" href="#" class="vpm-add"><?php echo $link_content; ?></a>
+			<a title="<?php echo esc_attr( $label_add ); ?>" href="#" class="vpm-add">
+				<?php echo $link_content; ?>
+			</a>
 		</p>
-		<p><a href="#" class="vpm-remove <?php echo ( $hide_remove ) ? 'hidden' : ''; ?>">Remove <?php echo esc_html( $field->label ); ?></a></p>
+		<p>
+			<a href="#" class="vpm-remove <?php echo ( $hide_remove ) ? 'hidden' : ''; ?>">
+				<?php echo esc_html( $label_remove ); ?>
+			</a>
+		</p>
 	</div>
 
 <?php

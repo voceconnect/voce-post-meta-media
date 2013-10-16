@@ -19,6 +19,7 @@
             this.$addLink    = this.$element.find(this.settings.addSelector);
             this.$removeLink = this.$element.find(this.settings.removeSelector);
             this.$inputField = this.$element.find(this.settings.inputSelector);
+            this.fieldLabel  = this.$addLink.attr('title');
             this.listen();
         },
 
@@ -37,9 +38,9 @@
 
         openModal: function() {
             var frameOptions = {
-                title: this.$element.data('label'),
+                title: this.fieldLabel,
                 button: {
-                  text: this.$element.data('label')
+                  text: this.fieldLabel
                 }
             };
             this.modal = wp.media.frames.file_frame = wp.media(frameOptions);
