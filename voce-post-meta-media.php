@@ -9,6 +9,8 @@
   License: GPL2
  */
 
+if ( !class_exists( 'Voce_Post_Meta_Media' ) ) {
+
 class Voce_Post_Meta_Media {
 
 	/**
@@ -117,7 +119,6 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	}
 
 ?>
-
 	<div class="vpm-media-field hide-if-no-js">
 		<p><?php voce_field_label_display( $field ); ?></p>
 		<p>
@@ -132,7 +133,8 @@ function voce_media_field_display( $field, $value, $post_id ) {
 			</a>
 		</p>
 	</div>
-
 <?php
 
 }
+
+} // End class check
