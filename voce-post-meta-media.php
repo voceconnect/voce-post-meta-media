@@ -99,19 +99,12 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		return;
 	}
 
-	global $content_width, $_wp_additional_image_sizes, $wp_version;
-
-	$post_type    = get_post_type( $post_id );
-	$value_post   = get_post( $value );
-	$mime_type    = $value_post->post_mime_type;
-	$icon         = ( strpos( $mime_type, 'image' ) ) ? false : true;
 	$field_id     = $field->get_input_id();
 	$field_name   = $field->get_name();
 	$label        = 'Set ' . $field->label;
 	$link_content = esc_html($label);
 	$hide_remove  = true;
 	$data_vars    = array();
-	$url_class    = '';
 	$field_data   = array(
 		'uploader_title'       => $label,
 		'uploader_button_text' => $label,
@@ -126,19 +119,11 @@ function voce_media_field_display( $field, $value, $post_id ) {
 
 	// If value is set get thumbnail to display and show remove button
 	if ( $value && get_post( $value ) ) {
-		$old_content_width = $content_width;
-		$content_width = 266;
-		if ( ! isset( $_wp_additional_image_sizes["{$post_type}-{$field->get_input_id( )}-thumbnail"] ) ) {
-			$thumbnail_html = wp_get_attachment_image( $value, array( $content_width, $content_width ), $icon );
-		}
-		else {
-			$thumbnail_html = wp_get_attachment_image( $value, "{$post_type}-{$field->get_input_id( )}-thumbnail", $icon );
-		}
+		$thumbnail_html = wp_get_attachment_image( $value, 'medium' );
 		if ( ! empty( $thumbnail_html ) ) {
 			$link_content = $thumbnail_html;
 			$hide_remove = false;
 		}
-		$content_width = $old_content_width;
 	}
 
 ?>
@@ -147,7 +132,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		<p><?php voce_field_label_display( $field ); ?></p>
 		<p>
 			<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value ); ?>" />
-			<a title="<?php esc_attr( $label ); ?>" href="#" class="vpm-add <?php echo esc_attr( $url_class ); ?>"><?php echo $link_content; ?></a>
+			<a style="max-width:100%" title="<?php esc_attr( $label ); ?>" href="#" class="vpm-add"><?php echo $link_content; ?></a>
 		</p>
 		<p><a href="#" class="vpm-remove <?php echo ( $hide_remove ) ? 'hidden' : ''; ?>">Remove <?php echo esc_html( $field->label ); ?></a></p>
 	</div>
