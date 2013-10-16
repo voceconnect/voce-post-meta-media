@@ -88,7 +88,7 @@
         attachImage: function( attachments ) {
             var attachment = attachments[0];
             this.setThumbID(attachment.id);
-            this.setThumbHTML(attachment.sizes.full.url);
+            this.setThumbHTML(attachment.sizes.medium.url);
             this.hasImage = true;
             this.$removeLink.show();
         },
@@ -107,7 +107,6 @@
 
         setThumbHTML: function( url ) {
             var $img = $('<img>');
-            $img.css({'max-width':'100%'});
             $img.attr('src', url);
             this.$addLink.html($img);
         }

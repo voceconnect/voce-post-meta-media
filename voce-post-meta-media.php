@@ -48,7 +48,8 @@ class Voce_Post_Meta_Media {
 			return;
 
 		wp_enqueue_media();
-		wp_enqueue_script( 'voce-post-meta-media', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'set-post-thumbnail' ) );
+		wp_enqueue_script( 'voce-post-meta-media-js', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'set-post-thumbnail' ) );
+		wp_enqueue_style( 'voce-post-meta-media-css', self::plugins_url( 'css/voce-post-meta-media.css', __FILE__ ) );
 	}
 
 	/**
@@ -132,7 +133,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		<p><?php voce_field_label_display( $field ); ?></p>
 		<p>
 			<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value ); ?>" />
-			<a style="max-width:100%" title="<?php esc_attr( $label ); ?>" href="#" class="vpm-add"><?php echo $link_content; ?></a>
+			<a title="<?php esc_attr( $label ); ?>" href="#" class="vpm-add"><?php echo $link_content; ?></a>
 		</p>
 		<p><a href="#" class="vpm-remove <?php echo ( $hide_remove ) ? 'hidden' : ''; ?>">Remove <?php echo esc_html( $field->label ); ?></a></p>
 	</div>
