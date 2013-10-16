@@ -89,9 +89,23 @@
         attachImage: function( attachments ) {
             var attachment = attachments[0];
             this.setThumbID(attachment.id);
-            this.setThumbHTML(attachment.sizes.medium.url);
+            this.setThumbHTML(this.getThumbUrl(attachment));
             this.hasImage = true;
             this.$removeLink.show();
+        },
+
+        getThumbUrl: function ( attachment ) {
+            var img_url = "";
+            if ( typeof attachment.sizes != "object" ) {
+                img_url = attachment.icon;
+            }
+            else if (typeof attachment.sizes.medium != "undefined") {
+                img_url = attachment.sizes.medium.url;
+            }
+            else {
+                img_url = attachment.sizes.full.url;
+            }
+            return img_url;
         },
 
         removeImage: function() {
