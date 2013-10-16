@@ -3,7 +3,8 @@
     var defaults   = {
         addSelector:    '.vpm-add',
         removeSelector: '.vpm-remove',
-        inputSelector:  '.vpm-id'
+        inputSelector:  '.vpm-id',
+        modalOptions:   {}
     };
 
     function PostMetaMedia ( element, options ) {
@@ -37,13 +38,14 @@
         },
 
         openModal: function() {
-            var frameOptions = {
+            var defaultOptions = {
                 title: this.fieldLabel,
                 button: {
                   text: this.fieldLabel
                 }
             };
-            this.modal = wp.media.frames.file_frame = wp.media(frameOptions);
+            var options = $.extend( defaultOptions, this.settings.modalOptions );
+            this.modal = wp.media.frames.file_frame = wp.media(options);
             this.modalListen();
             this.modal.open();
         },
