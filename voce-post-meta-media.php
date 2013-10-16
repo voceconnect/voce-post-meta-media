@@ -20,10 +20,6 @@ class Voce_Post_Meta_Media {
 
 		add_filter( 'meta_type_mapping', array( __CLASS__, 'meta_type_mapping' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'action_admin_enqueue_scripts' ) );
-
-		if ( version_compare( $wp_version, '3.5', '<' ) ) {
-			add_filter( 'attachment_fields_to_edit', array( __CLASS__, 'add_attachment_field' ), 20, 2 );
-		}
 	}
 
 	/**
@@ -51,54 +47,8 @@ class Voce_Post_Meta_Media {
 		if ( ! in_array( $hook, array( 'post-new.php', 'post.php', 'media-upload-popup' ) ) )
 			return;
 
-		if ( version_compare( $wp_version, '3.5', '<' ) ) {
-			add_thickbox();
-			wp_enqueue_script( 'vpm-featured-image', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'media-upload' ) );
-		} else { // 3.5+ media modal
-			wp_enqueue_media();
-			wp_enqueue_script( 'vpm-featured-image', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'set-post-thumbnail' ) );
-		}
-	}
-
-	/**
-	* Throw this in the media attachment fields
-	*
-	* @param string $form_fields
-	* @param string $post
-	* @return void
-	*/
-	public static function add_attachment_field( $form_fields, $post ) {
-		$calling_post_id = 0;
-		if ( isset( $_GET['post_id'] ) ) {
-			$calling_post_id = absint( $_GET['post_id'] );
-		}
-		elseif ( isset( $_POST ) && count( $_POST ) ) { // Like for async-upload where $_GET['post_id'] isn't set
-			$calling_post_id = $post->post_parent;
-		}
-
-		if ( ! $calling_post_id ) {
-			return $form_fields;
-		}
-
-		$referer = wp_get_referer();
-		$query_vars = wp_parse_args( parse_url( $referer, PHP_URL_QUERY ) );
-		$meta_id = ( isset($_REQUEST['meta_id']) ? $_REQUEST['meta_id'] : null );
-		if ( ( isset( $_REQUEST['context'] ) && $_REQUEST['context'] != $meta_id ) || ( isset( $query_vars['context'] ) && $query_vars['context'] != $meta_id ) ) {
-			return $form_fields;
-		}
-		$post_type = get_post_type( $calling_post_id );
-		$mime_type = $post->post_mime_type;
-		$icon = ( strpos( $mime_type, 'image' ) ) ? false : true;
-		$label = isset( $_REQUEST['meta_label'] ) ? $_REQUEST['meta_label'] : null;
-		$img_html = wp_get_attachment_image_src( $post->ID, 'medium', $icon );
-
-		$format_string = '<a id="set-%4$s-%1$s-thumbnail" class="%1$s-thumbnail" href="#" onclick="VocePostMetaMedia.setAsThumbnail(\'%2$s\', \'%5$s\', \'%1$s\', \'%4$s\');return false;">Set as %3$s</a>';
-		$link = sprintf( $format_string, $meta_id, $post->ID, $label, $post_type, esc_attr( $img_html[0] ) );
-		$form_fields["{$post_type}-{$meta_id}-thumbnail"] = array(
-			'label' => $label,
-			'input' => 'html',
-			'html' => $link );
-		return $form_fields;
+		wp_enqueue_media();
+		wp_enqueue_script( 'voce-post-meta-media', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'set-post-thumbnail' ) );
 	}
 
 	/**
@@ -161,7 +111,6 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$link_content = esc_html($label);
 	$hide_remove  = true;
 	$data_vars    = array();
-	$add_url      = '#';
 	$url_class    = '';
 	$field_data   = array(
 		'uploader_title'       => $label,
@@ -192,21 +141,13 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		$content_width = $old_content_width;
 	}
 
-	// Use the old thickbox for versions prior to 3.5
-	if ( version_compare( $wp_version, '3.5', '<' ) ) {
-		$add_url = get_upload_iframe_src( 'image' );
-		// if TB_iframe is not moved to end of query string, thickbox will remove all query args after it.
-		$add_url = add_query_arg( array( 'context' => $field->get_input_id( ), 'meta_id' => $field->get_input_id( ), 'meta_label' => $field->label, 'TB_iframe' => 1 ), remove_query_arg( 'TB_iframe', $image_library_url ) );
-		$url_class = 'thickbox';
-	}
-
 ?>
 
 	<div class="vpm-media-field hide-if-no-js" <?php echo implode(' ', $data_vars); ?>>
 		<p><?php voce_field_label_display( $field ); ?></p>
 		<p>
 			<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value ); ?>" />
-			<a title="<?php esc_attr( $label ); ?>" href="<?php echo esc_url( $add_url ); ?>" class="vpm-add <?php echo esc_attr( $url_class ); ?>"><?php echo $link_content; ?></a>
+			<a title="<?php esc_attr( $label ); ?>" href="#" class="vpm-add <?php echo esc_attr( $url_class ); ?>"><?php echo $link_content; ?></a>
 		</p>
 		<p><a href="#" class="vpm-remove <?php echo ( $hide_remove ) ? 'hidden' : ''; ?>">Remove <?php echo esc_html( $field->label ); ?></a></p>
 	</div>
