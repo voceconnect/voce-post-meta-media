@@ -108,8 +108,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$data_vars    = array();
 	$field_data   = array(
 		'uploader_title'       => $label,
-		'uploader_button_text' => $label,
-		'attachment_ids'       => $value
+		'uploader_button_text' => $label
 	);
 
 	// Prepare data attributes

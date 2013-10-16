@@ -70,7 +70,7 @@
         },
 
         attachmentToModal: function() {
-            var attachments = this.$element.data('attachment_ids');
+            var attachments = this.$inputField.val();
             if ( attachments ) {
                 var Attachment = wp.media.model.Attachment;
                 var selection = this.modal.state().get('selection');
@@ -102,7 +102,6 @@
 
         setThumbID: function( id ) {
             this.$inputField.val(id);
-            this.$element.data('attachment_ids', id);
         },
 
         setThumbHTML: function( url ) {
