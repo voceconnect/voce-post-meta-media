@@ -161,7 +161,6 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$link_content = esc_html($label);
 	$hide_remove  = true;
 	$data_vars    = array();
-	$data_atts    = '';
 	$add_url      = '#';
 	$url_class    = '';
 	$field_data   = array(
@@ -174,7 +173,6 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		if ( $val )
 			$data_vars[] = sprintf( 'data-%s="%s"', $key, esc_attr( $val ) );
 	}
-	$data_atts = implode(' ', $data_vars);
 
 	if ( $value && get_post( $value ) ) {
 		$old_content_width = $content_width;
@@ -192,8 +190,8 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		$content_width = $old_content_width;
 	}
 
+	// Use the old thickbox for versions prior to 3.5
 	if ( version_compare( $wp_version, '3.5', '<' ) ) {
-		// Use the old thickbox for versions prior to 3.5
 		$add_url = get_upload_iframe_src( 'image' );
 		// if TB_iframe is not moved to end of query string, thickbox will remove all query args after it.
 		$add_url = add_query_arg( array( 'context' => $field->get_input_id( ), 'meta_id' => $field->get_input_id( ), 'meta_label' => $field->label, 'TB_iframe' => 1 ), remove_query_arg( 'TB_iframe', $image_library_url ) );
@@ -202,7 +200,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 
 ?>
 
-	<div class="vpm-media-field hide-if-no-js" <?php echo $data_atts; ?>>
+	<div class="vpm-media-field hide-if-no-js" <?php echo implode(' ', $data_vars); ?>>
 		<p><?php voce_field_label_display( $field ); ?></p>
 		<p>
 			<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value ); ?>" />
