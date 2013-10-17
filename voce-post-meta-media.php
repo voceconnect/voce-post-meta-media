@@ -50,7 +50,7 @@ class Voce_Post_Meta_Media {
 			return;
 
 		wp_enqueue_media();
-		wp_enqueue_script( 'voce-post-meta-media-js', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'set-post-thumbnail' ) );
+		wp_enqueue_script( 'voce-post-meta-media-js', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'set-post-thumbnail' ), false, true );
 		wp_enqueue_style( 'voce-post-meta-media-css', self::plugins_url( 'css/voce-post-meta-media.css', __FILE__ ) );
 	}
 
@@ -102,6 +102,13 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		return;
 	}
 
+	$default_args = array(
+		'mime_types'  => array( 'video', 'image' ),
+		'multiple_select' =>false,
+	);
+	$args = shortcode_atts( $default_args, $field->args );
+	extract($args);
+
 	$value_post   = get_post( $value );
 	$field_id     = $field->get_input_id();
 	$field_name   = $field->get_name();
@@ -110,7 +117,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$link_content = esc_html($label_add);
 	$hide_remove  = true;
 	$mime_type    = $value_post->post_mime_type;
-    $icon         = ( strpos( $mime_type, 'image' ) ) ? false : true;
+	$icon         = ( strpos( $mime_type, 'image' ) ) ? false : true;
 
 	// If value is set get thumbnail to display and show remove button
 	if ( $value && $value_post ) {
@@ -120,6 +127,19 @@ function voce_media_field_display( $field, $value, $post_id ) {
 			$hide_remove = false;
 		}
 	}
+
+	$vpm_options = array(
+		'modalOptions' => array(
+			'title'    => $label_add,
+			'button'   => array(
+				'text'   => $label_add
+			),
+			'library'  => array(
+				'type' => $mime_types
+			)
+		)
+	);
+	wp_localize_script( 'voce-post-meta-media-js', 'VpmOptions', $vpm_options);
 
 ?>
 	<div class="vpm-media-field hide-if-no-js">
