@@ -135,18 +135,9 @@
 
     };
 
-    $.fn[ 'PostMetaMedia' ] = function ( options ) {
-        return this.each(function() {
-            if ( !$.data( this, 'PostMetaMedia' ) ) {
-                $.data( this, 'PostMetaMedia', new PostMetaMedia( this, options ) );
-            }
-        });
-    };
-
     $(document).ready(function(){
         $('.vpm-media-field').each(function(i, e){
-            $this = $(this);
-            $this.PostMetaMedia($this.data('field-settings'));
+            new PostMetaMedia( this, $(this).data('field-settings') );
         });
     });
 
