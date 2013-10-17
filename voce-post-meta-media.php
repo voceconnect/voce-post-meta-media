@@ -128,20 +128,6 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		}
 	}
 
-	$js_options = array(
-		'modalOptions' => array(
-			'multiple' => $multiple_select,
-			'title'    => $label_add,
-			'button'   => array(
-				'text'   => $label_add
-			),
-			'library'  => array(
-				'type'   => $mime_types
-			)
-		)
-	);
-	wp_localize_script( 'voce-post-meta-media-js', 'VpmOptions', $js_options);
-
 ?>
 	<div class="vpm-media-field hide-if-no-js">
 		<p><?php voce_field_label_display( $field ); ?></p>

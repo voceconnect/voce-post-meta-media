@@ -138,11 +138,7 @@
     };
 
     $(document).ready(function(){
-        var options = {};
-        if ( typeof VpmOptions === 'object' ) {
-            options = VpmOptions;
-        }
-        $('.vpm-media-field').PostMetaMedia(options);
+        $('.vpm-media-field').PostMetaMedia({});
     });
 
 })( jQuery, window, document );
