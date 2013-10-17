@@ -46,7 +46,7 @@ class Voce_Post_Meta_Media {
 	public static function action_admin_enqueue_scripts( $hook ) {
 		global $wp_version;
 
-		if ( ! in_array( $hook, array( 'post-new.php', 'post.php', 'media-upload-popup' ) ) )
+		if ( ! in_array( $hook, array( 'post-new.php', 'post.php' ) ) )
 			return;
 
 		wp_enqueue_media();
