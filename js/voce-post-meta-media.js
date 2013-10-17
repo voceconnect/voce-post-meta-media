@@ -4,6 +4,7 @@
         addSelector:    '.vpm-add',
         removeSelector: '.vpm-remove',
         inputSelector:  '.vpm-id',
+        thumbSize:      'medium',
         modalOptions:   {}
     };
 
@@ -104,6 +105,9 @@
             var img_url = "";
             if ( typeof attachment.sizes != "object" ) {
                 img_url = attachment.icon;
+            }
+            else if ( typeof attachment.sizes[this.settings.thumbSize] != "undefined" ) {
+                img_url = attachment.sizes[this.settings.thumbSize].url;
             }
             else if (typeof attachment.sizes.medium != "undefined") {
                 img_url = attachment.sizes.medium.url;

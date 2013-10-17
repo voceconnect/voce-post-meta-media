@@ -104,7 +104,8 @@ function voce_media_field_display( $field, $value, $post_id ) {
 
 	$default_args = array(
 		'mime_types'      => array( 'video', 'image' ),
-		'multiple_select' => false
+		'multiple_select' => false,
+		'thumb_size'      => 'medium'
 	);
 	$args = shortcode_atts( $default_args, $field->args );
 	extract($args);
@@ -124,7 +125,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 			if ( $value_post ) {
 				$mime_type = $value_post->post_mime_type;
 				$icon = ( strpos( $mime_type, 'image' ) ) ? false : true;
-				$thumbnail_html = wp_get_attachment_image( $attachment, 'medium', $icon );
+				$thumbnail_html = wp_get_attachment_image( $attachment, $thumb_size, $icon );
 				if ( ! empty( $thumbnail_html ) ) {
 					$link_content .= $thumbnail_html;
 					$hide_remove = false;
@@ -140,14 +141,15 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	}
 
 	$field_settings = array(
+		'thumbSize' => $thumb_size,
 		'modalOptions' => array(
 			'multiple' => $multiple_select,
-			'title'    => $label_add,
-			'button'   => array(
-				'text'   => $label_add
+			'title' => $label_add,
+			'button' => array(
+				'text' => $label_add
 			),
-			'library'  => array(
-				'type'   => $mime_types
+			'library' => array(
+				'type' => $mime_types
 			)
 		)
 	);
