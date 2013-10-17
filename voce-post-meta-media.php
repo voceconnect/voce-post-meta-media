@@ -102,6 +102,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		return;
 	}
 
+	// Parse args specific to media field display
 	$default_args = array(
 		'mime_types'      => array( 'video', 'image' ),
 		'multiple_select' => false,
@@ -110,6 +111,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$args = shortcode_atts( $default_args, $field->args );
 	extract($args);
 
+	// Html content vars
 	$field_id     = $field->get_input_id();
 	$field_name   = $field->get_name();
 	$label_add    = 'Set ' . $field->label;
@@ -140,6 +142,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		$hide_remove = true;
 	}
 
+	// Settings for the the js object
 	$field_settings = array(
 		'thumbSize' => $thumb_size,
 		'modalOptions' => array(
