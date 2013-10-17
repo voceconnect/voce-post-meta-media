@@ -109,23 +109,34 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	$args = shortcode_atts( $default_args, $field->args );
 	extract($args);
 
-	$value_post   = get_post( $value );
 	$field_id     = $field->get_input_id();
 	$field_name   = $field->get_name();
 	$label_add    = 'Set ' . $field->label;
 	$label_remove = 'Remove ' . $field->label;
-	$link_content = esc_html($label_add);
+	$link_content = '';
 	$hide_remove  = true;
-	$mime_type    = $value_post->post_mime_type;
-	$icon         = ( strpos( $mime_type, 'image' ) ) ? false : true;
 
-	// If value is set get thumbnail to display and show remove button
-	if ( $value && $value_post ) {
-		$thumbnail_html = wp_get_attachment_image( $value, 'medium', $icon );
-		if ( ! empty( $thumbnail_html ) ) {
-			$link_content = $thumbnail_html;
-			$hide_remove = false;
+	// If value is set get thumbnails to display and show remove button
+	if ( $value ) {
+		$values = explode(',', $value);
+		foreach ( $values as $attachment ) {
+			$value_post = get_post($attachment);
+			if ( $value_post ) {
+				$mime_type = $value_post->post_mime_type;
+				$icon = ( strpos( $mime_type, 'image' ) ) ? false : true;
+				$thumbnail_html = wp_get_attachment_image( $attachment, 'medium', $icon );
+				if ( ! empty( $thumbnail_html ) ) {
+					$link_content .= $thumbnail_html;
+					$hide_remove = false;
+				}
+			}
 		}
+	}
+
+	// If no thumbnails then use link text and hide remove
+	if ( empty($link_content) ) {
+		$link_content = esc_html($label_add);
+		$hide_remove = true;
 	}
 
 	$field_settings = array(

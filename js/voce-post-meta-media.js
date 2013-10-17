@@ -62,7 +62,7 @@
 
         getModalAttachment: function() {
             var attachments = [];
-            var selections = this.modal.state().get('selection').models;
+            var selections  = this.modal.state().get('selection').models;
             $.each( selections, function() {
                 attachments.push(this.toJSON());
             });
@@ -70,7 +70,7 @@
         },
 
         attachmentToModal: function() {
-            var attachments = this.$inputField.val();
+            var attachments = this.$inputField.val().split(',');
             if ( attachments ) {
                 var Attachment = wp.media.model.Attachment;
                 var selection = this.modal.state().get('selection');
@@ -86,9 +86,16 @@
         },
 
         attachImage: function( attachments ) {
-            var attachment = attachments[0];
-            this.setThumbID(attachment.id);
-            this.setThumbHTML(this.getThumbUrl(attachment));
+            var ids   = [];
+            var urls  = [];
+            var _this = this;
+            $.each( attachments, function(i, attachment){
+                var url = _this.getThumbUrl(attachment);
+                ids.push(attachment.id);
+                urls.push(url);
+            } );
+            this.setThumbID(ids);
+            this.setThumbHTML(urls);
             this.hasImage = true;
             this.$removeLink.show();
         },
@@ -109,7 +116,6 @@
 
         removeImage: function() {
             this.setThumbID('');
-            this.setThumbHTML('');
             this.$addLink.html(this.fieldLabel);
             this.hasImage = false;
         },
@@ -118,10 +124,14 @@
             this.$inputField.val(id);
         },
 
-        setThumbHTML: function( url ) {
-            var $img = $('<img>');
-            $img.attr('src', url);
-            this.$addLink.html($img);
+        setThumbHTML: function( urls ) {
+            _this = this;
+            this.$addLink.html('');
+            $.each( urls, function(i, url){
+                var $img = $('<img>');
+                $img.attr('src', url);
+                _this.$addLink.append($img);
+            } );
         }
 
     };
