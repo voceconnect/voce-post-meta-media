@@ -103,8 +103,8 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	}
 
 	$default_args = array(
-		'mime_types'  => array( 'video', 'image' ),
-		'multiple_select' =>false,
+		'mime_types'      => array( 'video', 'image' ),
+		'multiple_select' => false
 	);
 	$args = shortcode_atts( $default_args, $field->args );
 	extract($args);
@@ -128,8 +128,21 @@ function voce_media_field_display( $field, $value, $post_id ) {
 		}
 	}
 
+	$field_settings = array(
+		'modalOptions' => array(
+			'multiple' => $multiple_select,
+			'title'    => $label_add,
+			'button'   => array(
+				'text'   => $label_add
+			),
+			'library'  => array(
+				'type'   => $mime_types
+			)
+		)
+	);
+
 ?>
-	<div class="vpm-media-field hide-if-no-js">
+	<div class="vpm-media-field hide-if-no-js" data-field-settings="<?php echo esc_attr(json_encode($field_settings)); ?>" >
 		<p><?php voce_field_label_display( $field ); ?></p>
 		<p>
 			<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value ); ?>" />

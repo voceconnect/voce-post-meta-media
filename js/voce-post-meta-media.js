@@ -39,10 +39,7 @@
 
         openModal: function() {
             var defaultOptions = {
-                title: this.fieldLabel,
-                button: {
-                  text: this.fieldLabel
-                }
+                title: 'Select Media'
             };
             var options = $.extend( {}, defaultOptions, this.settings.modalOptions );
             this.modal = wp.media.frames.file_frame = wp.media(options);
@@ -138,7 +135,10 @@
     };
 
     $(document).ready(function(){
-        $('.vpm-media-field').PostMetaMedia({});
+        $('.vpm-media-field').each(function(i, e){
+            $this = $(this);
+            $this.PostMetaMedia($this.data('field-settings'));
+        });
     });
 
 })( jQuery, window, document );
