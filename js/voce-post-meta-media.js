@@ -21,7 +21,6 @@
             this.$addLink    = this.$element.find(this.settings.addSelector);
             this.$removeLink = this.$element.find(this.settings.removeSelector);
             this.$inputField = this.$element.find(this.settings.inputSelector);
-            this.fieldLabel  = this.$addLink.attr('title');
             this.listen();
         },
 
@@ -95,7 +94,7 @@
                 ids.push(attachment.id);
                 urls.push(url);
             } );
-            this.setThumbID(ids);
+            this.$inputField.val(ids);
             this.setThumbHTML(urls);
             this.hasImage = true;
             this.$removeLink.show();
@@ -119,13 +118,9 @@
         },
 
         removeImage: function() {
-            this.setThumbID('');
-            this.$addLink.html(this.fieldLabel);
+            this.$inputField.val('');
+            this.$addLink.html(this.$addLink.attr('title'));
             this.hasImage = false;
-        },
-
-        setThumbID: function( id ) {
-            this.$inputField.val(id);
         },
 
         setThumbHTML: function( urls ) {
