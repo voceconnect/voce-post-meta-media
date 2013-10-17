@@ -20,7 +20,6 @@
             this.$addLink    = this.$element.find(this.settings.addSelector);
             this.$removeLink = this.$element.find(this.settings.removeSelector);
             this.$inputField = this.$element.find(this.settings.inputSelector);
-            this.fieldLabel  = this.$addLink.attr('title');
             this.listen();
         },
 
@@ -39,10 +38,7 @@
 
         openModal: function() {
             var defaultOptions = {
-                title: this.fieldLabel,
-                button: {
-                  text: this.fieldLabel
-                }
+                title: 'Select Media'
             };
             var options = $.extend( {}, defaultOptions, this.settings.modalOptions );
             this.modal = wp.media.frames.file_frame = wp.media(options);
@@ -113,7 +109,7 @@
         removeImage: function() {
             this.setThumbID('');
             this.setThumbHTML('');
-            this.$addLink.html(this.fieldLabel);
+            this.$addLink.html(this.$addLink.attr('title'));
             this.hasImage = false;
         },
 
