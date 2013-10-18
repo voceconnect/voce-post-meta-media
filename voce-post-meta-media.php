@@ -104,7 +104,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 
 	// Parse args specific to media field display
 	$default_args = array(
-		'mime_types'      => array( 'video', 'image' ),
+		'mime_types'      => array( 'image' ),
 		'multiple_select' => false,
 		'thumb_size'      => 'medium'
 	);
