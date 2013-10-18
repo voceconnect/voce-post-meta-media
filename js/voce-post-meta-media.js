@@ -119,13 +119,13 @@
 
         removeImage: function() {
             this.$inputField.val('');
-            this.$addLink.html(this.$addLink.attr('title'));
+            this.$addLink.html(this.$addLink.attr('title')).addClass('button');
             this.hasImage = false;
         },
 
         setThumbHTML: function( urls ) {
             _this = this;
-            this.$addLink.html('');
+            this.$addLink.html('').removeClass('button');
             $.each( urls, function(i, url){
                 var $img = $('<img>');
                 $img.attr('src', url);

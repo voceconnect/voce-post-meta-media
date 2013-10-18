@@ -3,3 +3,7 @@
     height: auto;
     padding: 3px;
 }
+
+.vpm-media-field a{
+    display: inline-block;
+}
