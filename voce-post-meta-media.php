@@ -33,7 +33,8 @@ class Voce_Post_Meta_Media {
 		$mapping['media'] = array(
 			'class' => 'Voce_Meta_Field',
 			'args' => array(
-				'display_callbacks' => array( 'voce_media_field_display' )
+				'display_callbacks' => array( 'voce_media_field_display' ),
+				'sanitize_callbacks' => array( array( __CLASS__, 'voce_media_field_sanitize' ) )
 			)
 		);
 		return $mapping;
@@ -50,7 +51,7 @@ class Voce_Post_Meta_Media {
 			return;
 
 		wp_enqueue_media();
-		wp_enqueue_script( 'voce-post-meta-media-js', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery', 'set-post-thumbnail' ), false, true );
+		wp_enqueue_script( 'voce-post-meta-media-js', self::plugins_url( 'js/voce-post-meta-media.js', __FILE__ ), array( 'jquery' ), false, true );
 		wp_enqueue_style( 'voce-post-meta-media-css', self::plugins_url( 'css/voce-post-meta-media.css', __FILE__ ) );
 	}
 
@@ -81,6 +82,12 @@ class Voce_Post_Meta_Media {
 			return plugins_url( $relative_path, $plugin_path );
 		}
 	}
+
+	public static function voce_media_field_sanitize( $field, $old_value, $new_value, $post_id ){
+		$values = explode(',', $new_value);
+		$values = array_map( 'intval', $values);
+		return array_filter( $values );
+	}	
 
 }
 
@@ -121,8 +128,7 @@ function voce_media_field_display( $field, $value, $post_id ) {
 
 	// If value is set get thumbnails to display and show remove button
 	if ( $value ) {
-		$values = explode(',', $value);
-		foreach ( $values as $attachment ) {
+		foreach ( $value as $attachment ) {
 			$value_post = get_post($attachment);
 			if ( $value_post ) {
 				$mime_type = $value_post->post_mime_type;
@@ -161,13 +167,13 @@ function voce_media_field_display( $field, $value, $post_id ) {
 	<div class="vpm-media-field hide-if-no-js" data-field-settings="<?php echo esc_attr(json_encode($field_settings)); ?>" >
 		<p><?php voce_field_label_display( $field ); ?></p>
 		<p>
-			<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value ); ?>" />
+			<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( implode(',', (array) $value) ); ?>" />
 			<a title="<?php echo esc_attr( $label_add ); ?>" href="#" class="vpm-add <?php echo ( $hide_remove ) ? 'button' : ''; ?>">
 				<?php echo $link_content; ?>
 			</a>
 		</p>
 		<p>
-			<a href="#" class="vpm-remove button" <?php echo ( $hide_remove ) ? 'style="display:none;"' : ''; ?>">
+			<a href="#" class="vpm-remove button" <?php echo ( $hide_remove ) ? 'style="display:none;"' : ''; ?>>
 				<?php echo esc_html( $label_remove ); ?>
 			</a>
 		</p>
