@@ -99,7 +99,7 @@ class Voce_Post_Meta_Media {
 	 * @param type $post_id
 	 * @return type
 	 */
-	public static function display_media_field( $field, $value, $post_id ) {
+	public static function display_media_field( $field, array $value, $post_id ) {
 		if ( ! class_exists( 'Voce_Meta_API' ) ) {
 			return;
 		}
@@ -162,7 +162,7 @@ class Voce_Post_Meta_Media {
 		<div class="vpm-media-field hide-if-no-js" data-field-settings="<?php echo esc_attr(json_encode($field_settings)); ?>" >
 			<p><?php voce_field_label_display( $field ); ?></p>
 			<p>
-				<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( implode(',', (array) $value) ); ?>" />
+				<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( implode(',', $value) ); ?>" />
 				<a title="<?php echo esc_attr( $label_add ); ?>" href="#" class="vpm-add <?php echo ( $hide_remove ) ? 'button' : ''; ?>">
 					<?php echo $link_content; ?>
 				</a>
@@ -179,9 +179,7 @@ class Voce_Post_Meta_Media {
 
 }
 
-
 Voce_Post_Meta_Media::initialize();
-
 
 
 } // End class check
