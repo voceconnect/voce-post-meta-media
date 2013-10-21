@@ -1,9 +1,7 @@
 === Voce Post Meta Media ===
-Contributors: markparolisi, voceplatforms
-Donate link: 
-Tags: 
+Contributors: markparolisi, garysmirny, kevinlangleyjr, curtisloisel, voceplatforms  
 Requires at least: 3.5.0
-Tested up to: 3.6
+Tested up to: 3.6.1
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +10,8 @@ Extend Voce Post Meta with media fields
 
 == Description ==
 
-Works on both the old and new (3.5+) media modals
+Only works on the new (WP 3.5+) Media Modal
+For support with the old thickbox media handling, use the [pre_wp35_media_modal](https://github.com/voceconnect/voce-post-meta-media/tree/pre_wp35_media_modal) tag.
 
 == Installation ==
 

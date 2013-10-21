@@ -4,10 +4,6 @@
     "license": "GPLv2+",
     "authors": [
         {
-            "name": "Kevin Langley Jr",
-            "email": "klangley@voceconnect.com"
-        },
-        {
             "name": "Mark Parolisi",
             "email": "mark@voceconnect.com"
         },
@@ -18,6 +14,10 @@
         {
             "name": "Curtis Loisel",
             "email": "curtis@voceconnectcom"
+        },
+        {
+            "name": "Kevin Langley Jr",
+            "email": "klangley@voceconnect.com"
         }
     ],
     "minimum-stability": "stable",
