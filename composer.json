@@ -1,0 +1,29 @@
+{
+    "name": "voceconnect/voce-post-meta-media",
+    "description": "Extension of Voce Post Meta Plugin to create media meta fields",
+    "license": "GPLv2+",
+    "authors": [
+        {
+            "name": "Kevin Langley Jr",
+            "email": "klangley@voceconnect.com"
+        },
+        {
+            "name": "Mark Parolisi",
+            "email": "mark@voceconnect.com"
+        },
+        {
+            "name": "Gary Smirny",
+            "email": "gary@voceconnect.com"
+        },
+        {
+            "name": "Curtis Loisel",
+            "email": "curtis@voceconnectcom"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+    },
+    "autoload": {
+        "files": ["voce-post-meta-media.php"]
+    }
+}
