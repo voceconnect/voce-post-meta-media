@@ -34,7 +34,8 @@ class Voce_Post_Meta_Media {
 			'class' => 'Voce_Meta_Field',
 			'args' => array(
 				'display_callbacks' => array( array( __CLASS__, 'display_media_field' ) ),
-				'sanitize_callbacks' => array( array( __CLASS__, 'sanitize_media_field' ) )
+				'sanitize_callbacks' => array( array( __CLASS__, 'sanitize_media_field' ) ),
+				'default_value' => array()
 			)
 		);
 		return $mapping;
@@ -99,7 +100,7 @@ class Voce_Post_Meta_Media {
 	 * @param type $post_id
 	 * @return type
 	 */
-	public static function display_media_field( $field, array $value, $post_id ) {
+	public static function display_media_field( $field, $value, $post_id ) {
 		if ( ! class_exists( 'Voce_Meta_API' ) ) {
 			return;
 		}
@@ -119,10 +120,15 @@ class Voce_Post_Meta_Media {
 		$label_add    = 'Set ' . $field->label;
 		$label_remove = 'Remove ' . $field->label;
 		$link_content = '';
+		$value_string = '';
 		$hide_remove  = true;
 
 		// If value is set get thumbnails to display and show remove button
 		if ( $value ) {
+			if ( !is_array( $value ) ) {
+				$value = array( $value );
+			}
+			$value_string = implode(',', $value);
 			foreach ( $value as $attachment ) {
 				$value_post = get_post($attachment);
 				if ( $value_post ) {
@@ -162,7 +168,7 @@ class Voce_Post_Meta_Media {
 		<div class="vpm-media-field hide-if-no-js" data-field-settings="<?php echo esc_attr(json_encode($field_settings)); ?>" >
 			<p><?php voce_field_label_display( $field ); ?></p>
 			<p>
-				<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( implode(',', $value) ); ?>" />
+				<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value_string ); ?>" />
 				<a title="<?php echo esc_attr( $label_add ); ?>" href="#" class="vpm-add <?php echo ( $hide_remove ) ? 'button' : ''; ?>">
 					<?php echo $link_content; ?>
 				</a>
