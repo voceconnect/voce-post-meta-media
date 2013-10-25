@@ -1,6 +1,7 @@
 {
     "name": "voceconnect/voce-post-meta-media",
     "description": "Extension of Voce Post Meta Plugin to create media meta fields",
+    "type": "wordpress-plugin",
     "license": "GPLv2+",
     "authors": [
         {
