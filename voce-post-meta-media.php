@@ -85,9 +85,12 @@ class Voce_Post_Meta_Media {
 	}
 
 	public static function sanitize_media_field( $field, $old_value, $new_value, $post_id ){
-		$values = explode(',', $new_value);
-		$values = array_map( 'intval', $values);
-		return array_filter( $values );
+		if( isset( $field->args['multiple_select'] ) && $field->args['multiple_select'] ){
+			$values = array_map( 'intval', explode(',', $new_value) );
+			return array_filter( $values );
+		} else {
+			return intval($new_value);
+		}
 	}
 
 	/**
@@ -105,18 +108,13 @@ class Voce_Post_Meta_Media {
 			return;
 		}
 
-		// Parse args specific to media field display
-		$default_args = array(
-			'mime_types'      => array( 'image' ),
+		extract( wp_parse_args( $field->args, array(
+			'mime_types' => array( 'image' ),
 			'multiple_select' => false,
-			'thumb_size'      => 'medium'
-		);
-		$args = shortcode_atts( $default_args, $field->args );
-		extract($args);
+			'thumb_size' => 'medium'
+		) ) );
 
 		// Html content vars
-		$field_id     = $field->get_input_id();
-		$field_name   = $field->get_name();
 		$label_add    = 'Set ' . $field->label;
 		$label_remove = 'Remove ' . $field->label;
 		$link_content = '';
@@ -168,7 +166,7 @@ class Voce_Post_Meta_Media {
 		<div class="vpm-media-field hide-if-no-js" data-field-settings="<?php echo esc_attr(json_encode($field_settings)); ?>" >
 			<p><?php voce_field_label_display( $field ); ?></p>
 			<p>
-				<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $value_string ); ?>" />
+				<input class="hidden vpm-id" type="hidden" id="<?php echo esc_attr( $field->get_input_id() ); ?>" name="<?php echo esc_attr( $field->get_name() ); ?>" value="<?php echo esc_attr( $value_string ); ?>" />
 				<a title="<?php echo esc_attr( $label_add ); ?>" href="#" class="vpm-add <?php echo ( $hide_remove ) ? 'button' : ''; ?>">
 					<?php echo $link_content; ?>
 				</a>
@@ -181,7 +179,7 @@ class Voce_Post_Meta_Media {
 		</div>
 	<?php
 
-	}	
+	}
 
 }
 
