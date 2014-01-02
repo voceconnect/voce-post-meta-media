@@ -3,7 +3,7 @@
   Plugin Name: Voce Meta Media
   Plugin URI: http://vocecommunications.com
   Description: Extends Voce Post Meta with a media picker field
-  Version: 1.1.0
+  Version: 1.1.1
   Author: markparolisi, garysmirny, kevinlangleyjr, curtisloisel, voceplatforms
   Author URI: http://vocecommunications.com
   License: GPL2
