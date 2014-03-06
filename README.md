@@ -46,6 +46,9 @@ add_action('init', function(){
 ```
 
 
+**1.1.2**  
+*Added check for Voce_Meta_API*
+
 **1.1.0**  
 *Removed support for all versions lower than WordPress 3.5*
 
