@@ -3,7 +3,7 @@
   Plugin Name: Voce Meta Media
   Plugin URI: http://vocecommunications.com
   Description: Extends Voce Post Meta with a media picker field
-  Version: 1.1.1
+  Version: 1.1.2
   Author: markparolisi, garysmirny, kevinlangleyjr, curtisloisel, voceplatforms
   Author URI: http://vocecommunications.com
   License: GPL2
@@ -22,6 +22,7 @@ class Voce_Post_Meta_Media {
 
 		add_filter( 'meta_type_mapping', array( __CLASS__, 'meta_type_mapping' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'action_admin_enqueue_scripts' ) );
+		add_action( 'admin_init', array( __CLASS__, 'check_voce_meta_api' ) );
 	}
 
 	/**
@@ -180,6 +181,30 @@ class Voce_Post_Meta_Media {
 	<?php
 
 	}
+
+	/**
+	 * Check if Voce Post Meta is loaded
+	 * @method check_voce_meta_api
+	 * @return void
+	 */
+	public static function check_voce_meta_api() {
+		if ( !class_exists('Voce_Meta_API')) {
+	  		add_action('admin_notices', array( __CLASS__, 'voce_meta_api_not_loaded' ) );
+	  	}
+	}
+	
+	/**
+	 * Display message if Voce_Meta_API class (or Voce Post Meta plugin, more likely) is not available
+	 * @method voce_meta_api_not_loaded
+	 * @return void
+	 */
+	public static function voce_meta_api_not_loaded() {
+	    printf(
+	      '<div class="error"><p>%s</p></div>',
+	      __('Voce Meta Media Plugin cannot be utilized without the <a href="https://github.com/voceconnect/voce-post-meta" target="_BLANK">Voce Post Meta</a> plugin.')
+	    );
+	}		
+
 
 }
 
