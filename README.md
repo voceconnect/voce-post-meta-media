@@ -4,8 +4,8 @@ Voce Post Meta Media
 Contributors: markparolisi, garysmirny, kevinlangleyjr, curtisloisel, voceplatforms  
 Tags: post, meta, media  
 Requires at least: 3.5  
-Tested up to: 3.6.1  
-Stable tag: 1.1.1  
+Tested up to: 3.8.1  
+Stable tag: 1.1.2  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,9 @@ add_action('init', function(){
 ?>
 ```
 
+
+**1.1.2**  
+*Added check for Voce_Meta_API*
 
 **1.1.0**  
 *Removed support for all versions lower than WordPress 3.5*
