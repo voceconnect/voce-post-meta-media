@@ -138,6 +138,7 @@ class Voce_Post_Meta_Media {
 						$link_content .= $thumbnail_html;
 						$hide_remove = false;
 					}
+					$link_content .= '<br>' . get_the_title( $value_post->ID );
 				}
 			}
 		}
