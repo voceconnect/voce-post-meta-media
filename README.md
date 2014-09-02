@@ -14,7 +14,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Extend Voce Post Meta with media fields
 
 Only works on the new (WP 3.5+) Media Modal
-For support with the old thickbox media handling, use the [pre_wp35_media_modal](https://github.com/voceconnect/voce-post-meta-media/tree/pre_wp35_media_modal) tag.
+For support with the old thickbox media handling, use the [1.0.0](https://github.com/voceconnect/voce-post-meta-media/tree/1.0.0) tag.
 
 ## Installation
 
