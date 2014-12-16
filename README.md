@@ -45,7 +45,7 @@ add_action('init', function(){
 ?>
 ```
 
-#### Example for inserting a PDF
+#### Example using a custom mime type (in this example, a PDF)
 
 ```php
 <?php
