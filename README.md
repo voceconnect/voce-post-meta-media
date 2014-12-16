@@ -31,7 +31,7 @@ if( ! class_exists( 'Voce_Post_Meta_Media' ) ) {
 
 ## Usage
 
-#### Example
+#### Basic example for inserting an image
 
 ```php
 <?php
@@ -44,6 +44,23 @@ add_action('init', function(){
 });
 ?>
 ```
+
+#### Example for inserting a PDF
+
+```php
+<?php
+add_action('init', function(){
+	add_metadata_group( 'demo_meta', 'Page Options', array(
+		'capability' => 'edit_posts'
+	));
+	add_metadata_field( 'demo_meta', 'demo_media', 'Demo Media', 'media', array(
+		'mime_types' => array( 'application/pdf' )
+	));
+	add_post_type_support( 'page', 'demo_meta' );
+});
+?>
+```
+
 
 
 **1.1.2**  
