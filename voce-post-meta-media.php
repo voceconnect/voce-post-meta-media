@@ -1,28 +1,19 @@
 <?php
-/*
-  Plugin Name: Voce Meta Media
-  Plugin URI: http://vocecommunications.com
-  Description: Extends Voce Post Meta with a media picker field
-  Version: 1.1.2
-  Author: markparolisi, garysmirny, kevinlangleyjr, curtisloisel, voceplatforms
-  Author URI: http://vocecommunications.com
-  License: GPL2
- */
-
-if ( !class_exists( 'Voce_Post_Meta_Media' ) ) {
 
 class Voce_Post_Meta_Media {
 
+	protected static $initialized = false;
+
 	/**
 	 * setup plugin
-	 * @global string $wp_version
 	 */
 	public static function initialize() {
-		global $wp_version;
-
-		add_filter( 'meta_type_mapping', array( __CLASS__, 'meta_type_mapping' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'action_admin_enqueue_scripts' ) );
-		add_action( 'admin_init', array( __CLASS__, 'check_voce_meta_api' ) );
+		if( !self::$initialized ) {
+			add_filter( 'meta_type_mapping', array( __CLASS__, 'meta_type_mapping' ) );
+			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'action_admin_enqueue_scripts' ) );
+			add_action( 'admin_init', array( __CLASS__, 'check_voce_meta_api' ) );
+			self::$initialized = true;
+		}
 	}
 
 	/**
@@ -208,8 +199,3 @@ class Voce_Post_Meta_Media {
 
 
 }
-
-Voce_Post_Meta_Media::initialize();
-
-
-} // End class check
