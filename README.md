@@ -61,6 +61,11 @@ add_action('init', function(){
 ?>
 ```
 
+** 1.2.0 **
+* Switched to bootstrap file to intilize extension to prevent fatal errors for setups that load dependencies before WP
+
+** 1.1.3 **
+* Adding attachment title to display output of metabox
 
 
 **1.1.2**  
