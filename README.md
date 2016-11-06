@@ -4,8 +4,8 @@ Voce Post Meta Media
 Contributors: markparolisi, garysmirny, kevinlangleyjr, curtisloisel, voceplatforms  
 Tags: post, meta, media  
 Requires at least: 3.5  
-Tested up to: 3.8.1  
-Stable tag: 1.1.2  
+Tested up to: 4.6.1  
+Stable tag: 1.2.1  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,12 +61,14 @@ add_action('init', function(){
 ?>
 ```
 
-** 1.2.0 **
-* Switched to bootstrap file to intilize extension to prevent fatal errors for setups that load dependencies before WP
+**1.2.1**  
+*Adding br tag after title output to properly render multiple image selections*
 
-** 1.1.3 **
-* Adding attachment title to display output of metabox
+**1.2.0**  
+*Switched to bootstrap file to intilize extension to prevent fatal errors for setups that load dependencies before WP*
 
+**1.1.3**  
+*Adding attachment title to display output of metabox*
 
 **1.1.2**  
 *Added check for Voce_Meta_API*
